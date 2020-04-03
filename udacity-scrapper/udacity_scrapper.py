@@ -35,8 +35,9 @@ class UdacityScrapper:
                 real_title = title.text
                 category = card.find('h4', {'class': 'category'})
 
-                course_level = card.find('span', {'class': 'course-level'})
-                real_course_level = course_level.text
+                course_level = card.find('span', {'class': 'level'})
+                real_course_level = course_level.find('span',
+                                                      {'class': 'capitalize'})
 
                 skills_covered = card.find('div', {'class': 'skills'})
 
@@ -45,15 +46,20 @@ class UdacityScrapper:
                 skill_list = []
                 for skill in all_skills:
                     skill_list.append(skill.text)
+                if category:
+                    category = category.text.strip()
 
+                real_link = title.find('a', {'class': 'capitalize'})['href']
+         
                 db['course'].append(real_title)
-                db['link'].append(title.href)
-                db['skills'].append(skill_list)
+                db['link'].append(real_link)
+                db['desc'].append(skill_list[-1])
+                db['skills'].append(skill_list[:-1])
                 db['category'].append(category)
-                db['level'].append(real_course_level)
+                db['level'].append(real_course_level.text)
 
         df = pd.DataFrame.from_dict(db)
-        df.to_csv(os.path.join(self.data_save, f'res.csv'))
+        df.to_csv(os.path.join(self.data_save, f'res.csv'), index=False)
 
     def run(self):
         url = r'https://www.udacity.com/courses/all'
