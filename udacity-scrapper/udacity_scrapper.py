@@ -40,21 +40,28 @@ class UdacityScrapper:
                                                       {'class': 'capitalize'})
 
                 skills_covered = card.find('div', {'class': 'skills'})
+                if skills_covered:
+                    all_skills = skills_covered.findAll(
+                        'span', {'class': 'ng-star-inserted'})
+                else: 
+                    all_skills = None
 
-                all_skills = card.findAll('span',
-                                          {'class': 'ng-star-inserted'})
                 skill_list = []
-                for skill in all_skills:
-                    skill_list.append(skill.text)
-                if category:
-                    category = category.text.strip()
+                if all_skills:
+                    for skill in all_skills:
+                        skill_list.append(skill.text)
+                    if category:
+                        category = category.text.strip()
 
                 real_link = title.find('a', {'class': 'capitalize'})['href']
-         
+                desc = card.find('div', {'class': 'card__expander'})
+                real_desc = desc.find('span', {'class': 'ng-star-inserted'})
+                if real_desc:
+                    real_desc = real_desc.text
                 db['course'].append(real_title)
                 db['link'].append(real_link)
-                db['desc'].append(skill_list[-1])
-                db['skills'].append(skill_list[:-1])
+                db['desc'].append(real_desc)
+                db['skills'].append(skill_list)
                 db['category'].append(category)
                 db['level'].append(real_course_level.text)
 
