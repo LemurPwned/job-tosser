@@ -12,12 +12,14 @@ class noFluffJobsParser():
         self.ens_data = {
             'Role':       [],
             'Tags' :      [],
-            'Additional': []
+            'Additional': [],
+            'Salary': [],
+            'Locations': []
         }
 
     def parse_data(self, data):
         bs = BeautifulSoup(data, 'html.parser')
-        role = bs.find('nfj-posting-header', {'id': 'posting-header'}).find('h1').getText()
+        role = bs.find("div", {"class": 'posting-details-description'}).find('h1').getText()
         tags = []
         additional = {}
 
@@ -37,7 +39,10 @@ class noFluffJobsParser():
 
             additional[title] = value
 
-        return role, tags, additional
+        salary = bs.find('div', {'class': 'salary'}).find('h4').getText()
+        locations = bs.find('li', {'class': 'text-break'}).getText()
+
+        return role, tags, additional, salary, locations
 
     def parse_files(self, filenames):
         for filename in filenames:
@@ -46,12 +51,14 @@ class noFluffJobsParser():
 
             with open(filename, 'r', encoding = 'utf-8') as f:
                 data = f.read()
-                role, tags, additional = parser.parse_data(data)
+                role, tags, additional, salary, locations = parser.parse_data(data)
 
                 if tags:
                     self.ens_data['Role'] += [role]
                     self.ens_data['Tags'] += [tags]
                     self.ens_data['Additional'] += [additional]
+                    self.ens_data['Salary'] += [salary]
+                    self.ens_data['Locations'] += [locations]
 
 if __name__ == '__main__':
     parser = noFluffJobsParser()
