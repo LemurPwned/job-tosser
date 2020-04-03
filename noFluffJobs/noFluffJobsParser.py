@@ -69,7 +69,7 @@ if __name__ == '__main__':
 
     df = pd.DataFrame.from_dict(parser.ens_data)
 
-    df.to_csv('no_fluffs.csv')
+    df.to_csv('no_fluffs.csv', index=False)
 
 
 

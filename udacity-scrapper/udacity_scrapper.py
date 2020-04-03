@@ -35,25 +35,38 @@ class UdacityScrapper:
                 real_title = title.text
                 category = card.find('h4', {'class': 'category'})
 
-                course_level = card.find('span', {'class': 'course-level'})
-                real_course_level = course_level.text
+                course_level = card.find('span', {'class': 'level'})
+                real_course_level = course_level.find('span',
+                                                      {'class': 'capitalize'})
 
                 skills_covered = card.find('div', {'class': 'skills'})
+                if skills_covered:
+                    all_skills = skills_covered.findAll(
+                        'span', {'class': 'ng-star-inserted'})
+                else: 
+                    all_skills = None
 
-                all_skills = card.findAll('span',
-                                          {'class': 'ng-star-inserted'})
                 skill_list = []
-                for skill in all_skills:
-                    skill_list.append(skill.text)
+                if all_skills:
+                    for skill in all_skills:
+                        skill_list.append(skill.text)
+                    if category:
+                        category = category.text.strip()
 
+                real_link = title.find('a', {'class': 'capitalize'})['href']
+                desc = card.find('div', {'class': 'card__expander'})
+                real_desc = desc.find('span', {'class': 'ng-star-inserted'})
+                if real_desc:
+                    real_desc = real_desc.text
                 db['course'].append(real_title)
-                db['link'].append(title.href)
+                db['link'].append(real_link)
+                db['desc'].append(real_desc)
                 db['skills'].append(skill_list)
                 db['category'].append(category)
-                db['level'].append(real_course_level)
+                db['level'].append(real_course_level.text)
 
         df = pd.DataFrame.from_dict(db)
-        df.to_csv(os.path.join(self.data_save, f'res.csv'))
+        df.to_csv(os.path.join(self.data_save, f'res.csv'), index=False)
 
     def run(self):
         url = r'https://www.udacity.com/courses/all'
