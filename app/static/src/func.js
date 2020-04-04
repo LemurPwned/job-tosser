@@ -70,7 +70,6 @@ function craftRow(skill, value) {
 
 
 var colors = Chart.helpers.color;
-<<<<<<< HEAD
 
 
 function getSkillNumbers() {
@@ -172,5 +171,3 @@ function salariesChart() {
         }
     });
 }
-=======
->>>>>>> 31dadd958a9f1de6dc353744835e786248c8ce37
