@@ -140,7 +140,7 @@
             </div>
         </div>
         <!-- vertical pills here -->
-        <div class="row">
+        <div class="row" id="pills">
             <div class="col-3">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link" id="v-pills-courses-tab" data-toggle="pill" href="#v-pills-courses" role="tab"
@@ -345,7 +345,7 @@
                     }
                 }
 
-                let labels = ["1st quantile", "2nd quantile", "3rd quantile", "4th quantile"];
+                let labels = ["1st quantile (min, max)", "2nd quantile (min, max)", "3rd quantile (min, max)", "4th quantile (min, max)"];
                 let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"];
 
                 var config = {
@@ -367,7 +367,7 @@
                         legend: { display: false },
                         title: {
                             display: true,
-                            text: 'Salaries'
+                            text: 'Salaries (annual, in €)'
                         }
                     }
                 };
@@ -508,6 +508,7 @@
                             console.log(element)
                             addRow(element);
                         });
+                        $("#pills").show();
                     }, 1000);
                 }
             }
