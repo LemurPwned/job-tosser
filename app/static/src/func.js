@@ -14,14 +14,14 @@ function notFound() {
 
 function onReady() {
     console.log("ready!");
-    getSkillNumbers();
-    $('form input').keydown(function (e) {
-        if (e.keyCode == 13) {
-            e.preventDefault();
-            callAjax();
-            return false;
-        }
-    });
+
+    // $('form input').keydown(function (e) {
+    //     if (e.keyCode == 13) {
+    //         e.preventDefault();
+    //         callAjax();
+    //         return false;
+    //     }
+    // });
 }
 
 
@@ -54,7 +54,7 @@ function craftRow(skill, value) {
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: ${value}%; background-color: ${color};" aria-valuenow="${value}"
-                                    aria-valuemin="0" aria-valuemax="100">
+                                    aria-valuemin="0" aria-valuemax="500">
                                 </div>
                             </div>
                         </div>
@@ -128,4 +128,46 @@ function getSkillNumbers() {
         }
     };
     var radar = new Chart(document.getElementById('canvas'), config);
+}
+
+function salariesChart() {
+    var main_skills = $("#mainSkills").val().replace(/, /g, ",");
+    var additional_skills = $("#additionalSkills").val().replace(/, /g, ",");
+    var all_skills = main_skills.concat("|").concat(additional_skills);
+
+    $.ajax({
+        url: "/salaries",
+        data: {
+            skills: all_skills
+        },
+        success: function (result) {
+            var result_arr = JSON.parse(result)["salaries"];
+            
+            let labels = ["25%", "50%", "75%", "100%"];
+            let datasetArray = result_arr;
+            let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"];
+
+            var config = {
+                type: 'horizontalBar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                    {
+                        label: "€",
+                        backgroundColor: backgroundColors,
+                        data: datasetArray
+                    }
+                    ]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                    display: true,
+                    text: 'Salaries'
+                    }
+                }
+            };
+            var radar = new Chart(document.getElementById('salariesCanvas'), config);
+        }
+    });
 }
