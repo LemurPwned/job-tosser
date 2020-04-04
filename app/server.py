@@ -15,7 +15,6 @@ CORS(app)
 DATA_LOC = '../data'
 INDEX_FILE = 'index.html'
 
-
 DATABASE = os.path(DATA_LOC, 'DATABASE.pkl')
 REVERSE_DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
 COURSE_DATABASE = os.path.join(DATA_LOC, 'res.csv')
@@ -25,17 +24,16 @@ r_search = ReverseSearch(REVERSE_DATABASE)
 courses_finder = CoursesFinder(COURSE_DATABASE)
 
 
-
 @app.route('/')
 def root():
     return render_template(INDEX_FILE)
-
 
 
 @app.route('/match_course', methods=['GET'])
 def match_course():
     skills = request.args['skills'].lower()
     return courses_finder.perform_search(skills)
+
 
 @app.route('/reverse_search', methods=['GET'])
 def reverse_search():
