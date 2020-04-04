@@ -72,20 +72,26 @@ function craftRow(skill, value) {
 var colors = Chart.helpers.color;
 
 function salariesChart() {
-    var main_skills = $("#mainSkills").val().replace(/, /g, ",");
-    var additional_skills = $("#additionalSkills").val().replace(/, /g, ",");
-    var all_skills = main_skills.concat("|").concat(additional_skills);
+    var main_skills = $("#skillNames").val().replace(/, /g, ",");
 
     $.ajax({
-        url: "/salaries",
+        url: "/skill_salaries",
         data: {
-            skills: all_skills
+            skills: main_skills
         },
         success: function (result) {
-            var result_arr = JSON.parse(result)["salaries"];
-            
-            let labels = ["25%", "50%", "75%", "100%"];
-            let datasetArray = result_arr;
+            var min_arr = JSON.parse(result)["min_quantiles"];
+            var max_arr = JSON.parse(result)["max_quantiles"];
+
+            for (var i = 0; i < min_arr.length; i++) {
+                if (min_arr[i] > max_arr[i]) {
+                    var tmp = max_arr[i];
+                    max_arr[i] = min_arr[i];
+                    min_arr[i] = tmp;
+                }
+            }
+
+            let labels = ["1st quantile", "2nd quantile", "3rd quantile", "4th quantile"];
             let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"];
 
             var config = {
@@ -94,21 +100,24 @@ function salariesChart() {
                     labels: labels,
                     datasets: [
                     {
-                        label: "€",
                         backgroundColor: backgroundColors,
-                        data: datasetArray
+                        data: min_arr
+                    },
+                    {
+                        backgroundColor: backgroundColors,
+                        data: max_arr
                     }
                     ]
                 },
                 options: {
                     legend: { display: false },
                     title: {
-                    display: true,
-                    text: 'Salaries'
+                        display: true,
+                        text: 'Salaries'
                     }
                 }
             };
-            var radar = new Chart(document.getElementById('salariesCanvas'), config);
+            var barchart = new Chart(document.getElementById('salariesCanvas'), config);
         }
     });
 }
