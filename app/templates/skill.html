@@ -102,6 +102,9 @@
             left: 0;
             top: 0
         }
+        .pills {
+            margin-bottom:5px;
+        }
     </style>
 </head>
 
@@ -142,29 +145,38 @@
             </div>
         </div>
     </div>
-    {% for course in courses %}
-
-        <div class="jumbotron">
-            <h1 class="display-4">{{course['course']}}</h1>
-            <p class="lead">{{course['desc']}}</p>
-            {% if course['level'] == "beginner" %}
-                <button class="btn btn-success">{{course['level']}}</button>
-            {% endif %}
-            {% if course['level'] == "intermediate" %}
-                <button class="btn btn-warning">{{course['level']}}</button>
-            {% endif %}
-            {% if course['level'] == "advanced" %}
-                <button class="btn btn-danger">{{course['level']}}</button>
-            {% endif %}
-                <button class="btn btn-info">{{course['estimated_time']}}</button>
-            {% for n in course['skills'] %}
-                <button class="btn btn-secondary">{{n}}</button>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <canvas id="canvas" style="display: block;" class="chartjs-render-monitor"></canvas>
+            </div>
+            <div class="col">
+            {% for course in courses %}
+                <div class="jumbotron">
+                    <h1 class="display-4 ">{{course['course']}}</h1>
+                    <p class="lead">{{course['desc']}}</p>
+                    <!-- <div class="btn-group" role="group" aria-label="Basic example"> -->
+                        {% if course['level'] == "beginner" %}
+                            <button class="btn btn-success pills">Beginner</button>
+                        {% endif %}
+                        {% if course['level'] == "intermediate" %}
+                            <button class="btn btn-warning pills">Intermediate</button>
+                        {% endif %}
+                        {% if course['level'] == "advanced" %}
+                            <button class="btn btn-danger pills">Advanced</button>
+                        {% endif %}
+                            <button class="btn btn-info pills">{{course['estimated_time']}}</button>
+                        {% for n in course['skills'] %}
+                            <button class="btn btn-secondary pills">{{n}}</button>
+                        {% endfor %}
+                        
+                    <hr class="my-4">
+                    <a class="btn btn-primary btn-lg pills" href="https://udacity.com/{{course['link']}}" role="button">Learn more</a>
+                </div>
             {% endfor %}
-            <hr class="my-4">
-            <a class="btn btn-primary btn-lg" href="https://{{link}}" role="button">Learn more</a>
         </div>
-    {% endfor %}
-
+    </div>
+    
 </body>
 
 
