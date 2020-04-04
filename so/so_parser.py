@@ -57,12 +57,33 @@ class StackOverflowCarrers:
             k: None
             for k in [
                 'Job type', 'Experience level', 'Role', 'Industry',
-                'Company size', 'Company type'
+                'Company size', 'Company type', 'Salary', 'Remote', 
+                'Location'
             ]
         }
         with open(filename, 'r') as f:
             html_text = f.read()
             soup = BeautifulSoup(html_text, 'html.parser')
+            main_bar = soup.find('div', {'id': 'mainbar'})
+            grid_cell = main_bar.find('div', {'class': 'grid--cell fl1 sm:mb12'})
+            location = grid_cell.find('span', {'fc-black-500'}).text.replace(" ", "").replace("\n", "")[1:]
+            
+            mt12 = main_bar.find('div', {'class': 'mt12'})
+            salary = None
+            remote = None
+            try:
+                salary = mt12.find('span', {'class': '-salary pr16'})['title']
+            except:
+                pass
+
+            try:
+                remote = mt12.find('span', {'class': '-remote pr16'}).text.replace(" ", "").replace("\n", "")
+            except:
+                pass
+            
+            metrics["Location"] = location
+            metrics["Salary"] = salary
+            metrics["Remote"] = remote
             doc = soup.find('div', {"id": "overview-items"})
             doc = soup.findAll('section', {'class': 'mb32'})
             #print(doc)
@@ -90,10 +111,13 @@ if __name__ == "__main__":
     data = []
     ls = os.listdir('./data/soc/')
      
-    
+    i = 0
     for f in tqdm(ls):
+        #f = "1668_Mid_to_Senior_Front_End_Developer__$75K_to_$110000__LOCALREMOTE.html"
         #print(f)
         data.append((soc.parse_job_posting("./data/soc/" + f)))
         #time.sleep(1)
+        #break
+    #print(data)
     pickle.dump(data, open("so.pkl", "wb"))
     
