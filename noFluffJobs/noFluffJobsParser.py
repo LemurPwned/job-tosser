@@ -19,7 +19,12 @@ class noFluffJobsParser():
 
     def parse_data(self, data):
         bs = BeautifulSoup(data, 'html.parser')
-        role = bs.find("div", {"class": 'posting-details-description'}).find('h1').getText()
+        role = None
+        try:
+            role = bs.find("div", {"class": 'posting-details-description'}).find('h1').getText()
+        except:
+            print("No details")
+            role = None
         tags = []
         additional = {}
 
@@ -27,7 +32,12 @@ class noFluffJobsParser():
             for tag in aux.findAll('button'):
                 tags += [tag.getText().replace('\n','')]
 
-        for aux in bs.find('nfj-posting-specs', {'id': 'posting-specs'}).findAll('div', {'class': 'row'}):
+        search_elements = []
+        try:
+            search_elements = bs.find('nfj-posting-specs', {'id': 'posting-specs'}).findAll('div', {'class': 'row'})
+        except:
+            pass
+        for aux in search_elements:
 
             title = aux.find('div', {'class', 'col-sm-6'})
             if title is not None:
@@ -39,8 +49,23 @@ class noFluffJobsParser():
 
             additional[title] = value
 
-        salary = bs.find('div', {'class': 'salary'}).find('h4').getText()
-        locations = bs.find('li', {'class': 'text-break'}).getText()
+        salary = None
+        locations = None
+
+        try:
+            salary = bs.find('div', {'class': 'salary'}).find('h4').getText()
+        except:
+            salary = None
+            print("no location found")
+
+        try:
+            locations = bs.find('li', {'class': 'text-break'}).getText()
+        except:
+            print("no salary found")
+            salary = None
+        
+        #print(additional[title])
+        
 
         return role, tags, additional, salary, locations
 
@@ -63,11 +88,12 @@ class noFluffJobsParser():
 if __name__ == '__main__':
     parser = noFluffJobsParser()
 
-    ls = os.listdir('noFluffJobs/websites')
+    ls = os.listdir('./noFluffJobs/websites')
 
     parser.parse_files(['./noFluffJobs/websites/' + dir for dir in ls])
 
     df = pd.DataFrame.from_dict(parser.ens_data)
+    print(df.head())
 
     df.to_csv('no_fluffs.csv', index=False)
 

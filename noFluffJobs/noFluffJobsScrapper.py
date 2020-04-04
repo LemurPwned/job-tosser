@@ -42,9 +42,7 @@ class FluffScrapper():
             'c'
         ]
 
-        options = webdriver.ChromeOptions()
-        prefs = {"profile.managed_default_content_settings.images": 2}
-        options.add_experimental_option("prefs", prefs)
+        options = webdriver.FirefoxOptions()
         options.add_argument("--headless")
         options.add_argument('--disable-gpu')
         options.add_argument('--no-sandbox')
@@ -119,6 +117,7 @@ class FluffScrapper():
             except:
                 continue
 
+            time.sleep(2)
             with open('./websites/'+ offer_name + '.html', 'w+', encoding = 'utf-8') as f:
                 f.write(self.driver.page_source)
 
