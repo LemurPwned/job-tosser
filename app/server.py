@@ -1,5 +1,6 @@
 import json
 import os
+from ast import literal_eval
 
 from flask import Flask, render_template, request
 from flask_cors import CORS
@@ -7,7 +8,7 @@ from flask_cors import CORS
 from aggregator import Aggregator
 from courses_finder import CoursesFinder
 from reverse_search import ReverseSearch
-from ast import literal_eval
+from skill_matcher import SkillMatcher
 
 app = Flask(__name__)
 
@@ -20,13 +21,13 @@ SKILL_SUBPAGE = "skill.html"
 
 
 DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
-REVERSE_DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
 COURSE_DATABASE = os.path.join(DATA_LOC, 'res.csv')
 
-aggregator = Aggregator(DATABASE)
-r_search = ReverseSearch(REVERSE_DATABASE)
-courses_finder = CoursesFinder(COURSE_DATABASE)
+# aggregator = Aggregator(DATABASE)
+# r_search = ReverseSearch(DATABASE)
+skill_matcher = SkillMatcher(DATABASE)
 
+courses_finder = CoursesFinder(COURSE_DATABASE)
 
 @app.route('/')
 def root():
@@ -35,21 +36,24 @@ def root():
 @app.route('/skill', methods=['GET'])
 def skill():
     skill = request.args['skill'].lower()
-    course = courses_finder.perform_search(skill)
-    name = course['course']
-    link = "udacity.com/" + course['link']
-    desc = course['desc']
-    level = course['level']
-    color_dict = {"beginner": "btn btn-success", "intermediate": "btn btn-warning", "advanced": "btn btn-danger"}
-    estimated_time = course['estimated_time']
-    tags = list(course['skills'])
+    courses = courses_finder.perform_search(skill, 5)
+    #course = courses[0]
+    #for course in courses:
+
+    # name = course['course']
+    # link = "udacity.com/" + course['link']
+    # desc = course['desc']
+    # level = course['level']
+    # color_dict = {"beginner": "btn btn-success", "intermediate": "btn btn-warning", "advanced": "btn btn-danger"}
+    # estimated_time = course['estimated_time']
+    # tags = list(course['skills'])
     #j = json.loads(course)
     
-
-    return render_template(SKILL_SUBPAGE, skill_name = skill, \
-        course = name, link=link, description=desc, 
-        level_color=color_dict[level], level=level, est_time=estimated_time, \
-        tags=tags)
+    return render_template(SKILL_SUBPAGE, courses = courses)
+    # return render_template(SKILL_SUBPAGE, skill_name = skill, \
+    #     course = name, link=link, description=desc, 
+    #     level_color=color_dict[level], level=level, est_time=estimated_time, \
+    #     tags=tags)
 
 @app.route('/salaries', methods=['GET'])
 def salaries():
@@ -72,21 +76,33 @@ def match_course():
     return courses_finder.perform_search(skills)
 
 
-@app.route('/reverse_search', methods=['GET'])
-def reverse_search():
+# @app.route('/reverse_search', methods=['GET'])
+# def reverse_search():
+#     skills = request.args['skills'].lower()
+#     required, additional = skills.split("|")
+#     required = list(set(required.split(",")))
+#     additional = list(set(additional.split(",")))
+#     print(required, additional)
+#     limit = None
+#     try:
+#         limit = request.args['limit']
+#         limit = int(limit)
+#     except:
+#         limit = None
+#     return r_search.perform_search(required, additional, 10)
+
+
+@app.route('/skill_search', methods=['GET'])
+def skill_search():
     skills = request.args['skills'].lower()
-    required, additional = skills.split("|")
-    required = list(set(required.split(",")))
-    additional = list(set(additional.split(",")))
-    print(required, additional)
-    limit = None
+    print(skills)
+    limit = 5
     try:
         limit = request.args['limit']
         limit = int(limit)
     except:
-        limit = None
-    return r_search.perform_search(required, additional, 10)
-
+        pass 
+    return skill_matcher.perform_search(skills, limit)
 
 @app.route('/search', methods=['GET'])
 def search():
