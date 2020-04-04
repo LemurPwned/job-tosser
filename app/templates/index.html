@@ -236,7 +236,7 @@
         filled = true;
         $("#spinner").css("visibility", "visible");
         $.ajax({
-            url: "http://0.0.0.0:5000/reverse_search",
+            url: "/reverse_search",
             data: {
                 skills: all_skills
             },
@@ -256,6 +256,7 @@
                 }
             }
         });
+        salariesChart();
     };
 
     function addRow(parsedRow) {

@@ -51,10 +51,20 @@ def skill():
         level_color=color_dict[level], level=level, est_time=estimated_time, \
         tags=tags)
 
+@app.route('/salaries', methods=['GET'])
+def salaries():
+    skills = request.args['skills'].lower()
+    required, additional = skills.split("|")
+    required = list(set(required.split(",")))
+    additional = list(set(additional.split(",")))
+    print(r_search.perform_search(required, additional, 10))
+
+    response = {"salaries": [20, 20, 20, 20]}
+    return json.dumps(response)
+
 @app.route('/salary_map')
 def kepler_gl():
     return render_template(KEPLER_FILE)
-
 
 @app.route('/match_course', methods=['GET'])
 def match_course():
