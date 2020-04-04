@@ -70,3 +70,45 @@ function craftRow(skill, value) {
 
 
 var colors = Chart.helpers.color;
+
+function salariesChart() {
+    var main_skills = $("#mainSkills").val().replace(/, /g, ",");
+    var additional_skills = $("#additionalSkills").val().replace(/, /g, ",");
+    var all_skills = main_skills.concat("|").concat(additional_skills);
+
+    $.ajax({
+        url: "/salaries",
+        data: {
+            skills: all_skills
+        },
+        success: function (result) {
+            var result_arr = JSON.parse(result)["salaries"];
+            
+            let labels = ["25%", "50%", "75%", "100%"];
+            let datasetArray = result_arr;
+            let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"];
+
+            var config = {
+                type: 'horizontalBar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                    {
+                        label: "€",
+                        backgroundColor: backgroundColors,
+                        data: datasetArray
+                    }
+                    ]
+                },
+                options: {
+                    legend: { display: false },
+                    title: {
+                    display: true,
+                    text: 'Salaries'
+                    }
+                }
+            };
+            var radar = new Chart(document.getElementById('salariesCanvas'), config);
+        }
+    });
+}

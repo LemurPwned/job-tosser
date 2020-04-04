@@ -19,19 +19,20 @@ INDEX_FILE = 'index.html'
 KEPLER_FILE = 'kepler.gl.html'
 SKILL_SUBPAGE = "skill.html"
 
-
 DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
 COURSE_DATABASE = os.path.join(DATA_LOC, 'res.csv')
 
 # aggregator = Aggregator(DATABASE)
 # r_search = ReverseSearch(DATABASE)
-skill_matcher = SkillMatcher(DATABASE)
+skill_matcher = SkillMatcher(DATABASE.replace('.pkl', '.csv'))
 
 courses_finder = CoursesFinder(COURSE_DATABASE)
+
 
 @app.route('/')
 def root():
     return render_template(INDEX_FILE)
+
 
 @app.route('/skill', methods=['GET'])
 def skill():
@@ -48,12 +49,25 @@ def skill():
     # estimated_time = course['estimated_time']
     # tags = list(course['skills'])
     #j = json.loads(course)
-    
-    return render_template(SKILL_SUBPAGE, courses = courses)
+
+    return render_template(SKILL_SUBPAGE, courses=courses)
     # return render_template(SKILL_SUBPAGE, skill_name = skill, \
-    #     course = name, link=link, description=desc, 
+    #     course = name, link=link, description=desc,
     #     level_color=color_dict[level], level=level, est_time=estimated_time, \
     #     tags=tags)
+
+
+@app.route('/salaries', methods=['GET'])
+def salaries():
+    skills = request.args['skills'].lower()
+    required, additional = skills.split("|")
+    required = list(set(required.split(",")))
+    additional = list(set(additional.split(",")))
+    # print(skill_matcher.perform_search(required, additional, 10))
+
+    response = {"salaries": [20, 20, 20, 20]}
+    return json.dumps(response)
+
 
 @app.route('/salary_map')
 def kepler_gl():
@@ -91,8 +105,9 @@ def skill_search():
         limit = request.args['limit']
         limit = int(limit)
     except:
-        pass 
+        pass
     return skill_matcher.perform_search(skills, limit)
+
 
 @app.route('/search', methods=['GET'])
 def search():
@@ -112,4 +127,4 @@ def stats():
 
 
 if __name__ == '__main__':
-    app.run(host="0.0.0.0")
+    app.run(host="0.0.0.0", debug=True)
