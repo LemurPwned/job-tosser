@@ -82,10 +82,10 @@ function salariesChart() {
             skills: all_skills
         },
         success: function (result) {
-            var result_arr = JSON.parse(result)["salaries"];
+            var min_arr = JSON.parse(result)["min_salaries"];
+            var max_arr = JSON.parse(result)["max_salaries"];
 
             let labels = ["25%", "50%", "75%", "100%"];
-            let datasetArray = result_arr;
             let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"];
 
             var config = {
@@ -93,11 +93,14 @@ function salariesChart() {
                 data: {
                     labels: labels,
                     datasets: [
-                        {
-                            label: "€",
-                            backgroundColor: backgroundColors,
-                            data: datasetArray
-                        }
+                    {
+                        backgroundColor: backgroundColors,
+                        data: min_arr
+                    },
+                    {
+                        backgroundColor: backgroundColors,
+                        data: max_arr
+                    }
                     ]
                 },
                 options: {
