@@ -14,8 +14,8 @@ LOCAL_INV_TAG = 'local_inv_tag.pkl'
 
 class SkillMatcher:
     def __init__(self, database=None):
-        # self.df = pd.read_csv(database)
-        if os.path.isfile(LOCAL_MATRIX):
+        if os.path.isfile(LOCAL_MATRIX) and os.path.isfile(
+                LOCAL_INV_TAG) and os.path.isfile(LOCAL_FLAT_TAG):
             self.tag_matrix = np.load(LOCAL_MATRIX)
             self.flat_tag_dict = pickle.load(open(LOCAL_FLAT_TAG, 'rb'))
             self.inverted_tag_dict = pickle.load(open(LOCAL_INV_TAG, 'rb'))
@@ -23,7 +23,6 @@ class SkillMatcher:
             if not database:
                 raise ValueError("EMPTY DB LOC!")
             self.df = pd.read_csv(database)
-            # self.df = self.df.drop('Unnamed: 0', axis=1)
             self.df['tag'] = self.df['Tags'].apply(self.filter_tags)
             self.build_matrix()
         print("Loaded the data!")
@@ -72,13 +71,11 @@ class SkillMatcher:
         res_list = []
         sum_vals = sum(values)
         for i in range(size):
-            res_list.append(
-                {
-                    'skill': names[i],
-                    'count': values[i],
-                    'percentage': int(100*values[i]/sum_vals)
-                }
-            )
+            res_list.append({
+                'skill': names[i],
+                'count': values[i],
+                'percentage': int(100 * values[i] / sum_vals)
+            })
         return json.dumps(res_list)
 
 
