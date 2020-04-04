@@ -1,29 +1,13 @@
-import pandas as pd
-import pickle
-from collections import defaultdict, Counter, OrderedDict
 import json
+import pickle
+from collections import Counter, OrderedDict, defaultdict
+
+import pandas as pd
 
 
 class ReverseSearch:
-    def __init__(self):
-        try:
-            self.reverse_dict = pickle.load(open("reverse_dict2.pkl", "rb"))
-        except:
-            print("Unable to load pickle, generating...")
-            self.prepare_db()
-
-    def prepare_db(self):
-        df = pickle.load(open("concat_db2.pkl", "rb"))
-        reverse_dict = defaultdict(list)
-
-        for _, row in df.iterrows():
-            for tag in list(row['Tags']):
-                reverse_dict[tag].append(row['Role'].replace("'", ""))
-
-        for key in reverse_dict.keys():
-            reverse_dict[key] = set(reverse_dict[key])
-
-        pickle.dump(reverse_dict, open("reverse_dict2.pkl", "wb"))
+    def __init__(self, DATABASE):
+        self.reverse_dict = pickle.load(open(DATABASE, "rb"))
 
     def perform_search(self, required, additional, limit=None):
         data = set(self.reverse_dict[required[0]])

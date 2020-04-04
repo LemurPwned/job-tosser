@@ -1,11 +1,11 @@
-from so_parser import StackOverflowCarrers
-import pandas as pd
-from collections import defaultdict, Counter
-import os
-import json
 import ast
-import numpy as np
+import json
+import os
 import re
+from collections import Counter, defaultdict
+
+import numpy as np
+import pandas as pd
 
 
 def term_in_doc(t, d):
@@ -32,33 +32,10 @@ class Aggregator:
     synonyms = [("developer", "engineer")]
     forced = ["C", "java"]
 
-    def __init__(self):
-        self.src = '../data/soc'
-        self.SOC = StackOverflowCarrers(100)
-        self.db = pd.read_pickle('concat_db2.pkl')
+    def __init__(self, database):
+        self.db = pd.read_pickle(database)
         self.unique_roles = self.db['Role'].unique()
         self.role_tfidf = self.create_documents_counts(self.db)
-
-    def build_statistics(self):
-        filenames = [os.path.join(self.src, fn) for fn in os.listdir(self.src)]
-        statistics = defaultdict(list)
-        for filename in filenames:
-            try:
-                tags, desc = self.SOC.parse_job_posting(filename)
-                if tags:
-                    statistics['Tags'].append(list(set(tags)))
-                    if len(tags) > 20:
-                        print(tags, desc)
-                    for k, v in desc.items():
-                        statistics[k].append(v)
-            except Exception as e:
-                print(f"Failed {filename}")
-        df = pd.DataFrame.from_dict(statistics)
-        df = df.dropna(subset=['Role'])
-        # parse string which encodes a list to an actual list
-        # df['Skills'] = df['Tags'].apply(lambda x: np.array(ast.literal_eval(x))
-        # )
-        df.to_pickle('db_large.pkl')
 
     def replace_with_synonyms(self, role):
         for i in Aggregator.synonyms:
