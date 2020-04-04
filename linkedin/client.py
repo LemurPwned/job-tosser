@@ -9,14 +9,15 @@ import datetime
 import json
 import time
 from itertools import zip_longest
-from settings import search_keys
+from settings import search_keys, cities
 import random
 
 
 
 def write_line_to_file(filename, data):
     with open(filename, 'a', encoding='utf-8') as f:
-        json.dump(data, f, ensure_ascii=False, indent=4)
+        for line in data:
+            json.dump(line, f, ensure_ascii=False, indent=4)
 
 def get_date_time():
     """
@@ -328,7 +329,7 @@ class LIClient(object):
         attempts = 1
         url = "https://www.linkedin.com/jobs/?trk=nav_responsive_sub_nav_jobs"
         while not jobs_link_clickable:
-            time.sleep(1 + random.gauss(2, 2))
+            time.sleep(random.randint(1, 3))
             try:
                 self.driver.get(url)
             except Exception as e:
@@ -356,69 +357,70 @@ class LIClient(object):
         scrape postings for all pages in search results
         """
         driver = self.driver
-        search_results_exhausted = False
         print_num_search_results(driver)
 
         # wait bo tak
         time.sleep(1 + random.gauss(2, 1))
 
         print('driver.find_elements_by_class_name()', len(driver.find_elements_by_class_name('occludable-update')))
-        data = []
 
         # spac mi sie chce, ok? i tak w koncu spadnie z rowerka
         import copy
-        current_url = copy.copy(self.driver.current_url)
-        i = 9
-        while True:
-            print('iiiiiiiii', i)
-            if i > 0:
-                self.driver.get(f'{current_url}?start={i * 25}')
+
+        for city in cities:
+            data = []
+            print('city', city)
+            current_url = copy.copy(self.driver.current_url)
+            i = 0
+            while True:
+                print('iiiiiiiii', i)
+
+                self.driver.get(f'{current_url}?location={city}&start={i * 25}')
                 time.sleep(1 + random.gauss(2, 1))
 
-            for idx, item in enumerate(driver.find_elements_by_class_name('occludable-update')):
+                for idx, item in enumerate(driver.find_elements_by_class_name('occludable-update')):
+                    print('number on this page', idx)
+                    #item = item.find_element_by_class_name('job-card-search__title')
+                    item.click()
+                    time.sleep(random.randint(1, 3))
 
-                # bo wywala sie i juz, pewnie za godzine zmieni index gunwo walone
-                if i == 1 and idx == 6:
-                    continue
+                    try:
+                        position = driver.find_element_by_class_name('jobs-details-top-card__job-title').text
+                    except:
+                        print('died RIP')
+                        i += 1
+                        break
 
+                    # good luck parsing that
+                    # this motherfucker is pure up to recruiter
+                    # usually they make headers bold, BUT not always, fuq :<
+                    # whole_fuqing_unnormalized_bastard_body = driver.find_element_by_css_selector('#job-details > span').get_attribute('innerHTML')
+                    # just changed my mind bout naming...
 
-                print('number on this page', idx)
-                #item = item.find_element_by_class_name('job-card-search__title')
-                item.click()
-                time.sleep(1 + random.gauss(2, 2))
+                    whole_unnormalized_body = driver.find_element_by_css_selector('#job-details > span').get_attribute('innerHTML')
+                    item_data = {
+                        'position': position,
+                        'whole_unnormalized_body': whole_unnormalized_body,
+                        'job_description_details': {}
+                    }
 
-                position = driver.find_element_by_class_name('jobs-details-top-card__job-title').text
+                    header_info = driver.find_element_by_css_selector('.jobs-details-top-card__company-info').text
+                    groups = grouper(header_info.splitlines(), 2)
+                    for header, content in groups:
+                        item_data[header] = content
 
-                # good luck parsing that
-                # this motherfucker is pure up to recruiter
-                # usually they make headers bold, BUT not always, fuq :<
-                # whole_fuqing_unnormalized_bastard_body = driver.find_element_by_css_selector('#job-details > span').get_attribute('innerHTML')
-                # just changed my mind bout naming...
+                    job_description_details = driver.find_element_by_class_name('jobs-description-details')
+                    for job_description_item in job_description_details.find_elements_by_class_name('jobs-box__group'):
+                        header, content = job_description_item.text.splitlines()
+                        item_data['job_description_details'][header] = content
 
-                whole_unnormalized_body = driver.find_element_by_css_selector('#job-details > span').get_attribute('innerHTML')
-                item_data = {
-                    'position': position,
-                    'whole_unnormalized_body': whole_unnormalized_body,
-                    'job_description_details': {}
-                }
+                    data.append(item_data)
 
-                header_info = driver.find_element_by_css_selector('.jobs-details-top-card__company-info').text
-                groups = grouper(header_info.splitlines(), 2)
-                for header, content in groups:
-                    item_data[header] = content
+                # write to file
+                write_line_to_file(f'{city}.txt', data)
+                data = []
+                i += 1
 
-                job_description_details = driver.find_element_by_class_name('jobs-description-details')
-                for job_description_item in job_description_details.find_elements_by_class_name('jobs-box__group'):
-                    header, content = job_description_item.text.splitlines()
-                    item_data['job_description_details'][header] = content
-
-                data.append(item_data)
-
-            # write to file
-            write_line_to_file(self.filename, data)
-            data = []
-            i += 1
-
-            # looks like max
-            if i > 40:
-                break
+                # looks like max
+                if i > 39:
+                    break

@@ -8,17 +8,17 @@ import random
 if __name__ == "__main__":
 
     # initialize selenium webdriver - pass latest chromedriver path to webdriver.Chrome()
-    #driver = webdriver.Chrome('/usr/local/bin/chromedriver')
-    options = webdriver.ChromeOptions()
-    options.add_argument("--headless")
-    options.add_argument('--disable-gpu')
-    options.add_argument('--no-sandbox')
-    driver = webdriver.Remote(
-        command_executor="http://172.17.0.3:4445/wd/hub",
-        desired_capabilities=options.to_capabilities()
-    )
+    driver = webdriver.Chrome('/usr/local/bin/chromedriver')
+    #options = webdriver.ChromeOptions()
+    # options.add_argument("--headless")
+    # options.add_argument('--disable-gpu')
+    # options.add_argument('--no-sandbox')
+    # driver = webdriver.Remote(
+    #     command_executor="http://172.17.0.3:4445/wd/hub",
+    #     desired_capabilities=options.to_capabilities()
+    # )
 
-    #driver.maximize_window()
+    driver.maximize_window()
     driver.get("https://www.linkedin.com/uas/login")
 
     # initialize LinkedIn web client
