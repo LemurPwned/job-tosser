@@ -1,14 +1,28 @@
+import json
+
 from flask import Flask, request
 from flask_cors import CORS
-app = Flask(__name__)
-import json
+
 from aggregator import Aggregator
 from reverse_search import ReverseSearch
 
+app = Flask(__name__)
+
 CORS(app)
 
-aggregator = Aggregator()
-r_search = ReverseSearch()
+DATABASE = '../data/db.pkl'
+REVERSE_DATABASE = '../data/reverse_db.pkl'
+
+aggregator = Aggregator(DATABASE)
+r_search = ReverseSearch(REVERSE_DATABASE)
+
+INDEX_FILE = '../index.html'
+
+
+@app.route('/')
+def root():
+    return app.send_static_file(INDEX_FILE)
+
 
 @app.route('/')
 def hello():
@@ -20,6 +34,7 @@ def hello():
                 }
             </script>
             <div onclick='send_ajax()' style='width:100px;height:100px;background-color:red'></div>"""
+
 
 @app.route('/reverse_search', methods=['GET'])
 def reverse_search():
@@ -36,19 +51,23 @@ def reverse_search():
         limit = None
     return r_search.perform_search(required, additional, 10)
 
+
 @app.route('/search', methods=['GET'])
 def search():
     print(request.args['text'])
-    return aggregator.search_in_db(request.args['text'], int(request.args['limit']))
-    
+    return aggregator.search_in_db(request.args['text'],
+                                   int(request.args['limit']))
+
+
 @app.route('/stats', methods=['GET'])
 def stats():
     return aggregator.find_coocurring(request.args['skill'])
-    # return '''[{"name": "java", "result": 2.2234}, 
+    # return '''[{"name": "java", "result": 2.2234},
     #         {"name": "c++", "result": 1.24},
     #         {"name": "c", "result": 1.15}]
 
     #         '''
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0")
