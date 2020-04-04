@@ -30,7 +30,7 @@ def root():
     return render_template(INDEX_FILE)
 
 
-@app.route('/map')
+@app.route('/salary_map')
 def kepler_gl():
     return render_template(KEPLER_FILE)
 
