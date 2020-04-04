@@ -144,7 +144,7 @@
             </div>
         </div>
         <!-- vertical pills here -->
-        <div class="row">
+        <div class="row" id="pills">
             <div class="col-3">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                     <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
@@ -493,6 +493,7 @@
                             console.log(element)
                             addRow(element);
                         });
+                        $("#pills").show();
                     }, 1000);
                 }
             }

@@ -14,7 +14,7 @@ function notFound() {
 
 function onReady() {
     console.log("ready!");
-
+    $("#pills").hide();
     // $('form input').keydown(function (e) {
     //     if (e.keyCode == 13) {
     //         e.preventDefault();
