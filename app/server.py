@@ -19,7 +19,6 @@ DATA_LOC = '../data'
 INDEX_FILE = 'index.html'
 KEPLER_FILE = 'kepler.gl.html'
 COURSES_SUBPAGE = "courses.html"
-CHARTS_SUBPAGE = "charts.html"
 
 DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
 COURSE_DATABASE = os.path.join(DATA_LOC, 'res.csv')
@@ -38,7 +37,12 @@ def root():
 
 @app.route('/courses', methods=['GET'])
 def skill():
-    skill = request.args['skill'].lower()
+    skill = None
+    try:
+        skill = request.args['skill'].lower()
+    except:
+        pass
+
     courses = courses_finder.perform_search(skill, 6)
     return render_template(COURSES_SUBPAGE, courses=courses)
 
@@ -49,7 +53,11 @@ def kepler_gl():
 
 @app.route('/match_course', methods=['GET'])
 def match_course():
-    skills = request.args['skills'].lower()
+    skills = None
+    try:
+        skills = request.args['skills'].lower()
+    except:
+        pass
     return courses_finder.perform_search(skills)
 
 
@@ -80,6 +88,19 @@ def skill_search():
     except:
         pass
     return skill_matcher.perform_search(skills, limit)
+
+@app.route('/skill_seniority', methods=['GET'])
+def skill_search():
+    data = get_experience_count_by_technologies()
+    skills = "python"
+    try:
+        skills = request.args['skills'].lower()
+    except:
+        pass
+
+    seniority = data[skills]
+    
+    return str()
 
 
 @app.route('/skill_salaries', methods=['GET'])
