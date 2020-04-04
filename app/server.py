@@ -7,6 +7,7 @@ from flask_cors import CORS
 from aggregator import Aggregator
 from courses_finder import CoursesFinder
 from reverse_search import ReverseSearch
+from ast import literal_eval
 
 app = Flask(__name__)
 
@@ -15,6 +16,8 @@ CORS(app)
 DATA_LOC = '../data'
 INDEX_FILE = 'index.html'
 KEPLER_FILE = 'kepler.gl.html'
+SKILL_SUBPAGE = "skill.html"
+
 
 DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
 REVERSE_DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
@@ -29,6 +32,24 @@ courses_finder = CoursesFinder(COURSE_DATABASE)
 def root():
     return render_template(INDEX_FILE)
 
+@app.route('/skill', methods=['GET'])
+def skill():
+    skill = request.args['skill'].lower()
+    course = courses_finder.perform_search(skill)
+    name = course['course']
+    link = "udacity.com/" + course['link']
+    desc = course['desc']
+    level = course['level']
+    color_dict = {"beginner": "btn btn-success", "intermediate": "btn btn-warning", "advanced": "btn btn-danger"}
+    estimated_time = course['estimated_time']
+    tags = list(course['skills'])
+    #j = json.loads(course)
+    
+
+    return render_template(SKILL_SUBPAGE, skill_name = skill, \
+        course = name, link=link, description=desc, 
+        level_color=color_dict[level], level=level, est_time=estimated_time, \
+        tags=tags)
 
 @app.route('/salary_map')
 def kepler_gl():
