@@ -366,12 +366,14 @@ class LIClient(object):
 
         # spac mi sie chce, ok? i tak w koncu spadnie z rowerka
         import copy
+        current_url = copy.deepcopy(self.driver.current_url)
 
         for city in cities:
             data = []
             print('city', city)
-            current_url = copy.copy(self.driver.current_url)
             i = 0
+            if city == "USA":
+                i=7
             while True:
                 print('iiiiiiiii', i)
 
