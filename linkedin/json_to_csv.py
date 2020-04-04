@@ -1,13 +1,14 @@
 import pandas as pd
 import json
 from collections import defaultdict
+import codecs
 
-with open("output_1.txt") as f:
+with open("output_1.json") as f:
     data = f.read()
-data = data.replace("][", ",")
+#data = data.replace("][", ",")
 
 print(data)
-j = json.loads(data)
+j = json.loads(codecs.open(data, 'r', 'utf-8-sig'))
 
 all_keys = set()
 
