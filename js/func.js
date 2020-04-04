@@ -68,6 +68,10 @@ function craftRow(skill, value) {
     return row;
 }
 
+
+var colors = Chart.helpers.color;
+
+
 function getSkillNumbers() {
     var data_object = {
         "Data": [
@@ -102,7 +106,7 @@ function getSkillNumbers() {
             labels: labels,
             datasets: [{
                 label: 'Skill layout',
-                backgroundColor: '#E1B794',
+                backgroundColor: colors('#E1B794').alpha(0.2).rgbString(),
                 borderColor: '#90A9B7',
                 pointBackgroundColor: '#A28497',
                 data: dataset
