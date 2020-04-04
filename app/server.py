@@ -9,6 +9,7 @@ from aggregator import Aggregator
 from courses_finder import CoursesFinder
 from reverse_search import ReverseSearch
 from skill_matcher import SkillMatcher
+from utils import get_experience_count_by_technologies
 
 app = Flask(__name__)
 
@@ -17,7 +18,8 @@ CORS(app)
 DATA_LOC = '../data'
 INDEX_FILE = 'index.html'
 KEPLER_FILE = 'kepler.gl.html'
-SKILL_SUBPAGE = "skill.html"
+COURSES_SUBPAGE = "courses.html"
+CHARTS_SUBPAGE = "charts.html"
 
 DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
 COURSE_DATABASE = os.path.join(DATA_LOC, 'res.csv')
@@ -34,27 +36,18 @@ def root():
     return render_template(INDEX_FILE)
 
 
-@app.route('/skill', methods=['GET'])
+@app.route('/courses', methods=['GET'])
 def skill():
     skill = request.args['skill'].lower()
     courses = courses_finder.perform_search(skill, 6)
-    #course = courses[0]
-    #for course in courses:
+    return render_template(COURSES_SUBPAGE, courses=courses)
 
-    # name = course['course']
-    # link = "udacity.com/" + course['link']
-    # desc = course['desc']
-    # level = course['level']
-    # color_dict = {"beginner": "btn btn-success", "intermediate": "btn btn-warning", "advanced": "btn btn-danger"}
-    # estimated_time = course['estimated_time']
-    # tags = list(course['skills'])
-    #j = json.loads(course)
-
-    return render_template(SKILL_SUBPAGE, courses=courses)
-    # return render_template(SKILL_SUBPAGE, skill_name = skill, \
-    #     course = name, link=link, description=desc,
-    #     level_color=color_dict[level], level=level, est_time=estimated_time, \
-    #     tags=tags)
+@app.route('/charts', methods=['GET'])
+def charts():
+    skill = request.args['skill'].lower()
+    out_dict = utils.get_experience_count_by_technologies()
+    temp = out_dict[skill]
+    return render_template(CHARTS_SUBPAGE, )
 
 @app.route('/salaries', methods=['GET'])
 def salaries():
