@@ -14,6 +14,8 @@ LOCAL_INV_TAG = 'local_inv_tag.pkl'
 
 class SkillMatcher:
     def __init__(self, database=None):
+        self.df = pd.read_csv(database)
+        self.df['Tags'] = self.df['Tags'].apply(self.filter_tags)
         if os.path.isfile(LOCAL_MATRIX) and os.path.isfile(
                 LOCAL_INV_TAG) and os.path.isfile(LOCAL_FLAT_TAG):
             self.tag_matrix = np.load(LOCAL_MATRIX)
@@ -22,14 +24,12 @@ class SkillMatcher:
         else:
             if not database:
                 raise ValueError("EMPTY DB LOC!")
-            self.df = pd.read_csv(database)
-            self.df['tag'] = self.df['Tags'].apply(self.filter_tags)
             self.build_matrix()
         print("Loaded the data!")
 
     def build_matrix(self):
         tag_dict = defaultdict(list)
-        all_tags = self.df['tag'].tolist()
+        all_tags = self.df['Tags'].tolist()
 
         flat_tags = [tag for tag_list in all_tags for tag in tag_list]
         self.flat_tag_dict = {tag: i for i, tag in enumerate(flat_tags)}
@@ -56,6 +56,36 @@ class SkillMatcher:
     def filter_tags(self, str_tag_list):
         tag_list = ast.literal_eval(str_tag_list)
         return [x.strip() for x in tag_list]
+
+    def query_salary_per_skills(self,
+                                skill_list,
+                                quantiles=[0.25, 0.5, 0.75, 1.0]):
+        """
+        Return the quantiles for a set of skills 
+        """
+        skills_in_df_mask = self.df['Tags'].apply(
+            lambda x: set(skill_list).issubset(x))
+        skills_in = self.df[skills_in_df_mask]
+        # exclude zero stuff
+        skills_in = skills_in.loc[(skills_in['Min_Annual_Eur_Salary'] > 0)
+                                  & (skills_in['Max_Annual_Eur_Salary'] > 0)]
+
+        min_quantiles = skills_in['Min_Annual_Eur_Salary'].quantile(
+            quantiles).tolist()
+        max_quantiles = skills_in['Max_Annual_Eur_Salary'].quantile(
+            quantiles).tolist()
+
+        avg_min = skills_in['Min_Annual_Eur_Salary'].mean()
+        avg_max = skills_in['Max_Annual_Eur_Salary'].mean()
+
+        return_json = {
+            'min_quantiles': min_quantiles,
+            'max_quantiles': max_quantiles,
+            'avg_min': avg_min,
+            'avg_max': avg_max
+        }
+        print(return_json)
+        return json.dumps(return_json)
 
     def perform_search(self, tag, size=5):
         """
