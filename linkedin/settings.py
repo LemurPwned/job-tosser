@@ -10,7 +10,6 @@ csv_headers = ['position', 'whole_unnormalized_body', 'Industry', 'Seniority Lev
 
 
 cities = [
-    'USA',
     'England',
     'Germany',
     'France',
