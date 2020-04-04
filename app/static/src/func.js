@@ -15,6 +15,7 @@ function notFound() {
 function onReady() {
     console.log("ready!");
     getSkillNumbers();
+    salariesChart();
     $('form input').keydown(function (e) {
         if (e.keyCode == 13) {
             e.preventDefault();
@@ -128,4 +129,32 @@ function getSkillNumbers() {
         }
     };
     var radar = new Chart(document.getElementById('canvas'), config);
+}
+
+function salariesChart() {
+    let labels = ["Africa", "Asia", "Europe", "Latin America", "North America"];
+    let datasetArray = [2478,5267,734,784,433];
+    let backgroundColors = ["#3e95cd", "#8e5ea2","#3cba9f","#e8c3b9","#c45850"];
+
+    var config = {
+        type: 'horizontalBar',
+        data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Population (millions)",
+                backgroundColor: backgroundColors,
+                data: datasetArray
+              }
+            ]
+          },
+          options: {
+            legend: { display: false },
+            title: {
+              display: true,
+              text: 'Salaries'
+            }
+          }
+    };
+    var radar = new Chart(document.getElementById('salariesCanvas'), config);
 }
