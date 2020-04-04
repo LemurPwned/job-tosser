@@ -372,6 +372,8 @@ class LIClient(object):
             data = []
             print('city', city)
             i = 0
+            if city == "USA":
+                i=7
             while True:
                 print('iiiiiiiii', i)
 
