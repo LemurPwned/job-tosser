@@ -7,7 +7,7 @@ def filter_tags(str_tag_list):
     return [x.strip() for x in tag_list]
 
 class CoursesFinder:
-    def __init__(self, data_location="udacity-scrapper/udacity-data/res.csv"):
+    def __init__(self, data_location="data/res.csv"):
         self.data_location = data_location
         self.prepare_db()   
     
@@ -28,9 +28,8 @@ class CoursesFinder:
     def find_best_fitting(self, skills):
         meeting_reqs = []
         for skill in skills:
-            meeting_reqs.append(self.skill_to_courses[skill])
-        print(meeting_reqs)
-        c = Counter(meeting_reqs[0])
+            meeting_reqs.extend(self.skill_to_courses[skill])
+        c = Counter(meeting_reqs)
         return c.most_common(1)[0][0]
 
     def perform_search(self, skills):
