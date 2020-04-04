@@ -210,39 +210,39 @@
         </div>
 
 
-    <!-- </div>
+        <!-- </div>
     </div>
     </div> -->
 
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table id="modalTable" class="table" style="background-color: white;">
-                        <div id="modalSpinner" class="spinner-grow spinner-border mx-auto" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <tbody>
-                            <tr id="toDelete"></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="modalTable" class="table" style="background-color: white;">
+                            <div id="modalSpinner" class="spinner-grow spinner-border mx-auto" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <tbody>
+                                <tr id="toDelete"></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <footer style="margin-top: 25px;">
-        <p></p>
-    </footer>
+        <footer style="margin-top: 25px;">
+            <p></p>
+        </footer>
 </body>
 
 <script>
@@ -306,6 +306,64 @@
 
 
 
+
+    function salariesChart(main_skills) {
+        // var main_skills = $("#skillNames").val().replace(/, /g, ",");
+        console.log(main_skills)
+        $.ajax({
+            url: "/skill_salaries",
+            data: {
+                skills: main_skills
+            },
+            success: function (result) {
+                console.log(result)
+                var min_arr = JSON.parse(result)["min_quantiles"];
+                var max_arr = JSON.parse(result)["max_quantiles"];
+
+                for (var i = 0; i < min_arr.length; i++) {
+                    if (min_arr[i] > max_arr[i]) {
+                        var tmp = max_arr[i];
+                        max_arr[i] = min_arr[i];
+                        min_arr[i] = tmp;
+                    }
+                }
+
+                let labels = ["1st quantile", "2nd quantile", "3rd quantile", "4th quantile"];
+                let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"];
+
+                var config = {
+                    type: 'horizontalBar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                backgroundColor: backgroundColors,
+                                data: min_arr
+                            },
+                            {
+                                backgroundColor: backgroundColors,
+                                data: max_arr
+                            }
+                        ]
+                    },
+                    options: {
+                        legend: { display: false },
+                        title: {
+                            display: true,
+                            text: 'Salaries'
+                        }
+                    }
+                };
+                var barchart = new Chart(document.getElementById('salariesCanvas'), config);
+            }
+        });
+    }
+
+
+
+
+
+
     var options = {
         title: {
             display: true,
@@ -351,7 +409,6 @@
                 else {
 
                     // generate bar chart here 
-                    console.log(result);
                     var result_arr = JSON.parse(result);
 
                     let datapoints = []
@@ -369,6 +426,11 @@
                         }
                         c++
                     });
+
+                    // labelpoints.push(all_skills)
+                    req = labelpoints.join(',')
+                    console.log(req);
+                    salariesChart(req);
 
                     data = {
                         datasets: [{
@@ -437,20 +499,6 @@
                 }
             }
         });
-        $.ajax({
-            url: "/skill_search",
-            data: {
-                skills: all_skills
-            },
-            success: function (result) {
-                if (result === "[]") {
-                    notFound();
-                }
-                else {
-                }
-            }
-        })
-        salariesChart();
     };
 
 

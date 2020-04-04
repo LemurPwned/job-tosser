@@ -34,15 +34,12 @@ class SkillMatcher:
         flat_tags = [tag for tag_list in all_tags for tag in tag_list]
         self.flat_tag_dict = {tag: i for i, tag in enumerate(flat_tags)}
         self.inverted_tag_dict = {i: tag for i, tag in enumerate(flat_tags)}
-        vectors = np.zeros(shape=(len(all_tags), len(flat_tags)),
-                           dtype=np.uint16)
         self.tag_matrix = np.zeros(shape=(len(flat_tags), len(flat_tags)),
                                    dtype=np.uint16)
 
         for k, tag_list in enumerate(all_tags):
             for i in range(len(tag_list)):
                 i_tag = self.flat_tag_dict[tag_list[i]]
-                vectors[k][i] = 1
                 for j in range(len(tag_list)):
                     if i == j:
                         continue

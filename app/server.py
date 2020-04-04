@@ -99,6 +99,7 @@ def skill_search():
 @app.route('/skill_salaries', methods=['GET'])
 def skill_salaries():
     skills = request.args['skills'].lower()
+    print(skills)
     skills = skills.split(',')
     print(skills)
     return skill_matcher.query_salary_per_skills(skills)
