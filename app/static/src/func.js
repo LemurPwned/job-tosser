@@ -14,14 +14,14 @@ function notFound() {
 
 function onReady() {
     console.log("ready!");
-    getSkillNumbers();
-    $('form input').keydown(function (e) {
-        if (e.keyCode == 13) {
-            e.preventDefault();
-            callAjax();
-            return false;
-        }
-    });
+    // getSkillNumbers();
+    // $('form input').keydown(function (e) {
+    //     if (e.keyCode == 13) {
+    //         e.preventDefault();
+    //         callAjax();
+    //         return false;
+    //     }
+    // });
 }
 
 
@@ -54,7 +54,7 @@ function craftRow(skill, value) {
                             <div class="progress">
                                 <div class="progress-bar" role="progressbar"
                                     style="width: ${value}%; background-color: ${color};" aria-valuenow="${value}"
-                                    aria-valuemin="0" aria-valuemax="100">
+                                    aria-valuemin="0" aria-valuemax="500">
                                 </div>
                             </div>
                         </div>

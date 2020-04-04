@@ -9,10 +9,10 @@ REVERSE_SEARCH_DICT = 'reverse_search.pkl'
 
 
 class ReverseSearch:
-    def __init__(self, DATABASE):
+    def __init__(self, DATABASE=None):
         self.reverse_dict = {}
         if os.path.isfile(REVERSE_SEARCH_DICT):
-            self.reverse_dict = pickle.load(open(DATABASE, "rb"))
+            self.reverse_dict = pickle.load(open(REVERSE_SEARCH_DICT, "rb"))
         else:
             self.reverse_dict = self.prepare_db(DATABASE)
         print("REVERSE DATABASE loaded!")
