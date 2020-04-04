@@ -1,5 +1,6 @@
 import pandas as pd
 import ast
+import json
 from collections import defaultdict, Counter
 
 def filter_tags(str_tag_list):
@@ -28,10 +29,15 @@ class CoursesFinder:
     def find_best_fitting(self, skills):
         meeting_reqs = []
         for skill in skills:
-            meeting_reqs.append(self.skill_to_courses[skill])
+            meeting_reqs.extend(self.skill_to_courses[skill])
         print(meeting_reqs)
-        c = Counter(meeting_reqs[0])
-        return c.most_common(1)[0][0]
+        c = Counter(meeting_reqs)
+        
+        course, coocs = c.most_common(1)
+        return json.dumps({
+            'course': course,
+            'coocs': coocs
+        })
 
     def perform_search(self, skills):
         if isinstance(skills, str):
@@ -41,5 +47,5 @@ class CoursesFinder:
 
 if __name__ == "__main__":
     cf = CoursesFinder('../data/res.csv')
-    print(cf.perform_search(['Python', 'Django']))
+    print(cf.perform_search(['Python', 'Data Science']))
     #cf.prepare_db()

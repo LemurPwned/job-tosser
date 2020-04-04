@@ -35,7 +35,7 @@ def root():
 @app.route('/match_course', methods=['GET'])
 def match_course():
     skills = request.args['skills'].lower()
-    courses_finder.perform_search(skills)
+    return courses_finder.perform_search(skills)
 
 @app.route('/reverse_search', methods=['GET'])
 def reverse_search():
