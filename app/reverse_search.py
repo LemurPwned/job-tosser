@@ -3,11 +3,32 @@ import pickle
 from collections import Counter, OrderedDict, defaultdict
 
 import pandas as pd
+import os
+
+REVERSE_SEARCH_DICT = 'reverse_search.pkl'
 
 
 class ReverseSearch:
     def __init__(self, DATABASE):
-        self.reverse_dict = pickle.load(open(DATABASE, "rb"))
+        self.reverse_dict = {}
+        if os.path.isfile(REVERSE_SEARCH_DICT):
+            self.reverse_dict = pickle.load(open(DATABASE, "rb"))
+        else:
+            self.reverse_dict = self.prepare_db(DATABASE)
+        print("REVERSE DATABASE loaded!")
+
+    def prepare_db(self, db):
+        df = pickle.load(open(db, "rb"))
+        reverse_dict = defaultdict(list)
+
+        for _, row in df.iterrows():
+            for tag in list(row['Tags']):
+                reverse_dict[tag].append(row['Role'].replace("'", ""))
+
+        for key in reverse_dict.keys():
+            reverse_dict[key] = set(reverse_dict[key])
+        pickle.dump(reverse_dict, open(REVERSE_SEARCH_DICT, "wb"))
+        return reverse_dict
 
     def perform_search(self, required, additional, limit=None):
         data = set(self.reverse_dict[required[0]])
