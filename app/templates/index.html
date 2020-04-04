@@ -138,41 +138,81 @@
             </div>
         </div>
 
+
+
         <div id="spinner" class="d-flex row mt-5 col" style="visibility: hidden">
             <div class="spinner-grow spinner-border mx-auto" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col">
-                    <!-- bar chart -->
-                    <div id="barChartContainer" class="pb-4">
-                        <canvas id="barChart" class="pb-1"
-                            style="padding-bottom: 15px; width:100%; height:500px; aspect-ratio: 4/3; margin-top: 5px;"></canvas>
+        <!-- vertical pills here -->
+        <div class="row">
+            <div class="col-3">
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
+                        aria-controls="v-pills-home" aria-selected="true">Skills</a>
+                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
+                        aria-controls="v-pills-profile" aria-selected="false">Pie chart</a>
+                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab"
+                        aria-controls="v-pills-messages" aria-selected="false">Radial chart</a>
+                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab"
+                        aria-controls="v-pills-settings" aria-selected="false">Salaries</a>
+                </div>
+            </div>
+            <div class="col-9">
+                <div class="tab-content" id="v-pills-tabContent">
+                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                        aria-labelledby="v-pills-home-tab">
+
+                        <!-- main table -->
+                        <table id="mainTable" class="table table-hover mt-3" style="background-color: white;">
+                            <tbody>
+                                <tr></tr>
+                            </tbody>
+                        </table>
                     </div>
 
-                </div>
-                <div class="col">
-                    <!-- skill chart -->
-                    <!-- <div style="width:40%" id='skillChartContainer'> -->
-                    <div class="pb-4" id='skillChartContainer'>
-                        <canvas id="skillChart"
-                            style="padding-bottom: 15px; width:100%; aspect-ratio: 4/3; margin-top: 5px;" width="1140"
-                            height="570" class="chartjs-render-monitor"></canvas>
+                    <div class="tab-pane fade" id="v-pills-profile" role="tabpanel"
+                        aria-labelledby="v-pills-profile-tab">
+
+                        <!-- bar chart -->
+                        <div id="barChartContainer" class="pb-4">
+                            <canvas id="barChart" class="pb-1"
+                                style="padding-bottom: 15px; width:100%; height:500px; aspect-ratio: 4/3; margin-top: 5px;"></canvas>
+                        </div>
+                    </div>
+
+
+                    <div class="tab-pane fade" id="v-pills-messages" role="tabpanel"
+                        aria-labelledby="v-pills-messages-tab">
+
+                        <!-- radial chart -->
+                        <div class="pb-4" id='skillChartContainer'>
+                            <canvas id="skillChart"
+                                style="padding-bottom: 15px; width:100%; aspect-ratio: 4/3; margin-top: 5px;"
+                                width="1140" height="570" class="chartjs-render-monitor">
+                            </canvas>
+                        </div>
+                    </div>
+
+
+                    <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
+                        aria-labelledby="v-pills-settings-tab">
+
+                        <!-- salalry chart  -->
+                        <div class="pb-4" id='salaryChartContainer'>
+                            <canvas id="salariesCanvas" style="display: block; height: 485px; width: 870px;"
+                                width="1140" height="570" class="chartjs-render-monitor"></canvas>
+                        </div>
                     </div>
                 </div>
-
-                <table id="mainTable" class="table table-hover mt-3" style="background-color: white;">
-                    <tbody>
-                        <tr></tr>
-                    </tbody>
-                </table>
             </div>
         </div>
+
+
+    <!-- </div>
     </div>
-    </div>
-    </div>
+    </div> -->
 
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -200,21 +240,6 @@
             </div>
         </div>
     </div>
-
-    <!-- Tutaj jest chart  -->
-    <div style="width:40%" id='salaries-chart'>
-        <div class="chartjs-size-monitor">
-            <div class="chartjs-size-monitor-expand">
-                <div class=""></div>
-            </div>
-            <div class="chartjs-size-monitor-shrink">
-                <div class=""></div>
-            </div>
-        </div>
-        <canvas id="salariesCanvas" style="display: block; height: 485px; width: 870px;" width="1140" height="570"
-            class="chartjs-render-monitor"></canvas>
-    </div>
-
     <footer style="margin-top: 25px;">
         <p></p>
     </footer>
