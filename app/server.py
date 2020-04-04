@@ -37,7 +37,7 @@ def root():
 @app.route('/skill', methods=['GET'])
 def skill():
     skill = request.args['skill'].lower()
-    courses = courses_finder.perform_search(skill, 5)
+    courses = courses_finder.perform_search(skill, 6)
     #course = courses[0]
     #for course in courses:
 

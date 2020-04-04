@@ -42,6 +42,9 @@
 
         #mainTable {
             display: none;
+            width:60%;
+            position:relative;
+            left:20%;
         }
 
         .spinner-border {
@@ -115,10 +118,10 @@
             </div>
         </div>
     </nav>
-    
 
 
-    <div class="container">
+
+    <div class="container" style="width:80%">
         <img src="/static/images/partial_logo.png" class="mx-auto d-block" style="padding-top: 0%; padding-bottom: 0%">
         <div id="topBar" class="sticky-top pb-4" style="background-color: #FAFAFA;">
             <img src="/static/images/name.png" class="mx-auto d-block">
@@ -128,37 +131,47 @@
                         <input type="text" class="form-control col-12 form-control-lg" id="skillNames"
                             placeholder="Skill name">
                     </div>
-                    <button type="button" class="btn mb-2 btn-lg col-1" style="background-color:#7f94a3; color: white"
+                    <button id="submit-button" type="button" class="btn mb-2 btn-lg col-1"
+                        style="background-color:#7f94a3; color: white"
                         onclick="javascript:requestMatchingSkills(); return false">Search</button>
                 </form>
             </div>
         </div>
+
         <div id="spinner" class="d-flex row mt-5 col" style="visibility: hidden">
             <div class="spinner-grow spinner-border mx-auto" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-        <div class="d-flex row mt-3 col-8 mx-auto">
-            <!-- bar chart -->
-            <div id="barChartContainer" class="pb-4">
-                <canvas id="barChart" class="pb-1"
-                    style="padding-bottom: 15px; height: 370px; aspect-ratio: 4/3; margin-top: 5px;"></canvas>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col">
+                    <!-- bar chart -->
+                    <div id="barChartContainer" class="pb-4">
+                        <canvas id="barChart" class="pb-1"
+                            style="padding-bottom: 15px; width:100% height:500px aspect-ratio: 4/3; margin-top: 5px;"></canvas>
+                    </div>
+                    
+                </div>
+                <div class="col">
+                    <!-- skill chart -->
+                    <!-- <div style="width:40%" id='skillChartContainer'> -->
+                    <div class="pb-4" id='skillChartContainer'>
+                        <canvas id="skillChart"
+                            style="padding-bottom: 15px; width:100%; aspect-ratio: 4/3; margin-top: 5px;"
+                            width="1140" height="570" class="chartjs-render-monitor"></canvas>
+                    </div>
+                </div>
+
+                <table id="mainTable" class="table table-hover mt-3" style="background-color: white;">
+                    <tbody>
+                        <tr></tr>
+                    </tbody>
+                </table>
             </div>
-
-            <!-- skill chart -->
-            <!-- <div style="width:40%" id='skillChartContainer'> -->
-            <div class="pb-4" id='skillChartContainer'>
-                <canvas id="skillChart" style="padding-bottom: 15px; height: 370px; aspect-ratio: 4/3; margin-top: 5px;"
-                    width="1140" height="570" class="chartjs-render-monitor"></canvas>
-            </div>
-
-
-            <table id="mainTable" class="table table-hover mt-3" style="background-color: white;">
-                <tbody>
-                    <tr></tr>
-                </tbody>
-            </table>
         </div>
+    </div>
+    </div>
     </div>
 
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
@@ -257,6 +270,14 @@
                 //Draw text in center
                 ctx.fillText(txt, centerX, centerY);
             }
+        }
+    });
+
+    var input = document.getElementById("skillNames");
+    input.addEventListener("keyup", function (event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+            document.getElementById("submit-button").click();
         }
     });
 

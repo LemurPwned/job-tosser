@@ -102,8 +102,9 @@
             left: 0;
             top: 0
         }
+
         .pills {
-            margin-bottom:5px;
+            margin-bottom: 5px;
         }
     </style>
 </head>
@@ -112,71 +113,77 @@
 
 <body style="background-color:#FAFAFA">
 
-    
+
     <div class="container">
         <img src="/static/images/partial_logo.png" class="mx-auto d-block" style="padding-top: 5%; padding-bottom: 0%">
         <div class="sticky-top" style="background-color: #FAFAFA;">
             <img src="/static/images/name.png" class="mx-auto d-block">
         </div>
 
-    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-        aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <table id="modalTable" class="table" style="background-color: white;">
-                        <div id="modalSpinner" class="spinner-grow spinner-border mx-auto" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <tbody>
-                            <tr id="toDelete"></tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+            aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">Modal title</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table id="modalTable" class="table" style="background-color: white;">
+                            <div id="modalSpinner" class="spinner-grow spinner-border mx-auto" role="status">
+                                <span class="sr-only">Loading...</span>
+                            </div>
+                            <tbody>
+                                <tr id="toDelete"></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <canvas id="canvas" style="display: block;" class="chartjs-render-monitor"></canvas>
-            </div>
-            <div class="col">
+        <div class="container-fluid" style="padding-top:20px">
             {% for course in courses %}
-                <div class="jumbotron">
-                    <h1 class="display-4 ">{{course['course']}}</h1>
-                    <p class="lead">{{course['desc']}}</p>
-                    <!-- <div class="btn-group" role="group" aria-label="Basic example"> -->
-                        {% if course['level'] == "beginner" %}
+            {% if loop.index0 % 2 == 0 %}
+            <div class="row">
+                {% endif %}
+                <div class="col">
+                    <div class="jumbotron">
+                        <div style="height:500px">
+                            <h1 class="display-4 ">{{course['course']}}</h1>
+                            <p class="lead">{{course['desc']}}</p>
+                            <!-- <div class="btn-group" role="group" aria-label="Basic example"> -->
+                            {% if course['level'] == "beginner" %}
                             <button class="btn btn-success pills">Beginner</button>
-                        {% endif %}
-                        {% if course['level'] == "intermediate" %}
+                            {% endif %}
+                            {% if course['level'] == "intermediate" %}
                             <button class="btn btn-warning pills">Intermediate</button>
-                        {% endif %}
-                        {% if course['level'] == "advanced" %}
+                            {% endif %}
+                            {% if course['level'] == "advanced" %}
                             <button class="btn btn-danger pills">Advanced</button>
-                        {% endif %}
+                            {% endif %}
                             <button class="btn btn-info pills">{{course['estimated_time']}}</button>
-                        {% for n in course['skills'] %}
+                            {% for n in course['skills'] %}
                             <button class="btn btn-secondary pills">{{n}}</button>
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
+                        <hr class="my-4">
+                        <a class="btn btn-primary btn-lg pills" href="https://udacity.com/{{course['link']}}"
+                                role="button">Learn more</a>
                         
-                    <hr class="my-4">
-                    <a class="btn btn-primary btn-lg pills" href="https://udacity.com/{{course['link']}}" role="button">Learn more</a>
+                    </div>
                 </div>
+                {% if loop.index0 % 2 == 1 %}
+            </div>
+            {% endif %}
             {% endfor %}
         </div>
-    </div>
-    
+
+
 </body>
 
 
@@ -283,7 +290,7 @@
         });
     }
 
- 
+
 </script>
 
 </html>
