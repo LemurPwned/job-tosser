@@ -39,11 +39,13 @@ class CoursesFinder:
         course, coocs = c.most_common(1)
         return json.dumps({'course': course, 'coocs': coocs})
 
-    def perform_search(self, skills):
+    def perform_search(self, skills, n=1):
         if isinstance(skills, str):
-            course_name = self.skill_to_courses[skills.lower()][0]
-            course = self.df[self.df['course'] == course_name].iloc[0]
-            return course
+            courses_names = self.skill_to_courses[skills.lower()][:n]
+            ret = []
+            for course_name in courses_names:
+                ret.append(self.df[self.df['course'] == course_name].iloc[0])
+            return ret
         else:
             return self.find_best_fitting([s.lower() for s in skills])
 

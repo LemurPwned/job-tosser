@@ -35,21 +35,24 @@ def root():
 @app.route('/skill', methods=['GET'])
 def skill():
     skill = request.args['skill'].lower()
-    course = courses_finder.perform_search(skill)
-    name = course['course']
-    link = "udacity.com/" + course['link']
-    desc = course['desc']
-    level = course['level']
-    color_dict = {"beginner": "btn btn-success", "intermediate": "btn btn-warning", "advanced": "btn btn-danger"}
-    estimated_time = course['estimated_time']
-    tags = list(course['skills'])
+    courses = courses_finder.perform_search(skill, 5)
+    #course = courses[0]
+    #for course in courses:
+
+    # name = course['course']
+    # link = "udacity.com/" + course['link']
+    # desc = course['desc']
+    # level = course['level']
+    # color_dict = {"beginner": "btn btn-success", "intermediate": "btn btn-warning", "advanced": "btn btn-danger"}
+    # estimated_time = course['estimated_time']
+    # tags = list(course['skills'])
     #j = json.loads(course)
     
-
-    return render_template(SKILL_SUBPAGE, skill_name = skill, \
-        course = name, link=link, description=desc, 
-        level_color=color_dict[level], level=level, est_time=estimated_time, \
-        tags=tags)
+    return render_template(SKILL_SUBPAGE, courses = courses)
+    # return render_template(SKILL_SUBPAGE, skill_name = skill, \
+    #     course = name, link=link, description=desc, 
+    #     level_color=color_dict[level], level=level, est_time=estimated_time, \
+    #     tags=tags)
 
 @app.route('/salary_map')
 def kepler_gl():

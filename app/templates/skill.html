@@ -142,18 +142,28 @@
             </div>
         </div>
     </div>
+    {% for course in courses %}
 
-    <div class="jumbotron">
-        <h1 class="display-4">{{course}}</h1>
-        <p class="lead">{{description}}</p>
-        <button class="{{level_color}}">{{level}}</button>
-        <button class="btn btn-info">{{est_time}}</button>
-        {% for n in tags %}
-        <button class="btn btn-secondary">{{n}}</button>
-        {% endfor %}
-        <hr class="my-4">
-        <a class="btn btn-primary btn-lg" href="https://{{link}}" role="button">Learn more</a>
-      </div>
+        <div class="jumbotron">
+            <h1 class="display-4">{{course['course']}}</h1>
+            <p class="lead">{{course['desc']}}</p>
+            {% if course['level'] == "beginner" %}
+                <button class="btn btn-success">{{course['level']}}</button>
+            {% endif %}
+            {% if course['level'] == "intermediate" %}
+                <button class="btn btn-warning">{{course['level']}}</button>
+            {% endif %}
+            {% if course['level'] == "advanced" %}
+                <button class="btn btn-danger">{{course['level']}}</button>
+            {% endif %}
+                <button class="btn btn-info">{{course['estimated_time']}}</button>
+            {% for n in course['skills'] %}
+                <button class="btn btn-secondary">{{n}}</button>
+            {% endfor %}
+            <hr class="my-4">
+            <a class="btn btn-primary btn-lg" href="https://{{link}}" role="button">Learn more</a>
+        </div>
+    {% endfor %}
 
 </body>
 
