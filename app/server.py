@@ -4,9 +4,9 @@ import os
 from flask import Flask, render_template, request
 from flask_cors import CORS
 
-from app.aggregator import Aggregator
-from app.courses_finder import CoursesFinder
-from app.reverse_search import ReverseSearch
+from aggregator import Aggregator
+from courses_finder import CoursesFinder
+from reverse_search import ReverseSearch
 
 app = Flask(__name__)
 
@@ -15,7 +15,7 @@ CORS(app)
 DATA_LOC = '../data'
 INDEX_FILE = 'index.html'
 
-DATABASE = os.path(DATA_LOC, 'DATABASE.pkl')
+DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
 REVERSE_DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
 COURSE_DATABASE = os.path.join(DATA_LOC, 'res.csv')
 
