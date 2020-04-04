@@ -90,7 +90,7 @@ def skill_search():
     return skill_matcher.perform_search(skills, limit)
 
 @app.route('/skill_seniority', methods=['GET'])
-def skill_search():
+def skill_seniority():
     data = get_experience_count_by_technologies()
     skills = "python"
     try:
@@ -99,8 +99,7 @@ def skill_search():
         pass
 
     seniority = data[skills]
-    
-    return str()
+    return json.dumps(seniority)
 
 
 @app.route('/skill_salaries', methods=['GET'])

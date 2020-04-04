@@ -131,8 +131,8 @@ function seniorityChart() {
             skills: main_skills
         },
         success: function (result) {
-            var min_arr = JSON.parse(result)["min_quantiles"];
-            var max_arr = JSON.parse(result)["max_quantiles"];
+            seniority = JSON.parse(result);
+            console.log(seniority)
 
             for (var i = 0; i < min_arr.length; i++) {
                 if (min_arr[i] > max_arr[i]) {
