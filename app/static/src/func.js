@@ -71,65 +71,6 @@ function craftRow(skill, value) {
 
 var colors = Chart.helpers.color;
 
-
-function getSkillNumbers() {
-    var data_object = {
-        "Data": [
-            {
-                "name": "Docker",
-                "value": 10
-            },
-            {
-                "name": "Terraform",
-                "value": 5
-            },
-            {
-                "name": "English",
-                "value": 12
-            },
-            {
-                "name": "Linux",
-                "value": 12
-            }
-        ]
-    };
-    let labels = [];
-    let dataset = [];
-    data_object["Data"].forEach((el) => {
-        labels.push(el['name'])
-        dataset.push(el['value'])
-    });
-
-    var config = {
-        type: 'radar',
-        data: {
-            labels: labels,
-            datasets: [{
-                label: 'Skill layout',
-                backgroundColor: colors('#E1B794').alpha(0.2).rgbString(),
-                borderColor: '#90A9B7',
-                pointBackgroundColor: '#A28497',
-                data: dataset
-            }]
-        },
-        options: {
-            legend: {
-                position: 'top',
-            },
-            title: {
-                display: true,
-                text: 'Skill radar chart'
-            },
-            scale: {
-                ticks: {
-                    beginAtZero: true
-                }
-            }
-        }
-    };
-    var radar = new Chart(document.getElementById('canvas'), config);
-}
-
 function salariesChart() {
     var main_skills = $("#mainSkills").val().replace(/, /g, ",");
     var additional_skills = $("#additionalSkills").val().replace(/, /g, ",");
