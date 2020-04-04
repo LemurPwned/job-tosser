@@ -14,6 +14,7 @@ CORS(app)
 
 DATA_LOC = '../data'
 INDEX_FILE = 'index.html'
+KEPLER_FILE = 'kepler.gl.html'
 
 DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
 REVERSE_DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
@@ -27,6 +28,11 @@ courses_finder = CoursesFinder(COURSE_DATABASE)
 @app.route('/')
 def root():
     return render_template(INDEX_FILE)
+
+
+@app.route('/map')
+def kepler_gl():
+    return render_template(KEPLER_FILE)
 
 
 @app.route('/match_course', methods=['GET'])
