@@ -36,7 +36,7 @@ def root():
 
 
 @app.route('/courses', methods=['GET'])
-def skill():
+def courses():
     skill = None
     try:
         skill = request.args['skill'].lower()

@@ -143,9 +143,9 @@
         <div class="row" id="pills">
             <div class="col-3">
                 <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link" id="v-pills-courses-tab" data-toggle="pill" href="#v-pills-courses" role="tab"
+                    <a class="nav-link active" id="v-pills-courses-tab" data-toggle="pill" href="#v-pills-courses" role="tab"
                         aria-controls="v-pills-courses" aria-selected="true">Courses</a>
-                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
+                    <a class="nav-link" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
                         aria-controls="v-pills-home" aria-selected="false">Skills</a>
                     <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
                         aria-controls="v-pills-profile" aria-selected="false">Pie chart</a>
@@ -160,7 +160,19 @@
             </div>
             <div class="col-9">
                 <div class="tab-content" id="v-pills-tabContent">
-                    <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel"
+                    <div class="tab-pane fade show active" id="v-pills-courses" role="tabpanel"
+                    aria-labelledby="v-pills-courses-tab">
+
+                        <!-- courses -->
+                        <iframe src="http://127.0.0.1:5000/courses?skill=python" style="width: 100%;
+                        height: 1000px;
+                        border-style: none;
+                        scroll-behavior: smooth;
+                        overflow-y: hidden;
+                        overflow-x: hidden;"></iframe>
+                    </div>
+
+                    <div class="tab-pane fade" id="v-pills-home" role="tabpanel"
                         aria-labelledby="v-pills-home-tab">
 
                         <!-- main table -->
