@@ -2,13 +2,15 @@ import pandas as pd
 import json
 from collections import defaultdict
 import codecs
+import sys
 
-with open("output_1.json") as f:
-    data = f.read()
-#data = data.replace("][", ",")
+f = sys.argv[1]
 
-print(data)
-j = json.loads(codecs.open(data, 'r', 'utf-8-sig'))
+#with open(f) as f:
+    #data = f.read()
+
+#print(data)
+j = json.load(codecs.open(f, 'r', 'utf-8-sig'))
 
 all_keys = set()
 
@@ -45,10 +47,7 @@ for el in j:
             continue
         csv_data += '"' + str(line[key]) + '",'
     csv_data += "\n"
-with open("fb.csv", "w+") as f:
+name = sys.argv[1].split(".")[0]
+print(name)
+with open(name + ".csv", "w+") as f:
     f.write(csv_data)
-
-
-
-
-
