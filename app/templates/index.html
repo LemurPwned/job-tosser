@@ -110,44 +110,6 @@
 <body style="background-color:#FAFAFA">
 
 
-    <!-- <div class="container">
-        <img src="/static/images/partial_logo.png" class="mx-auto d-block" style="padding-top: 5%; padding-bottom: 0%">
-        <div class="sticky-top" style="background-color: #FAFAFA;">
-            <img src="/static/images/name.png" class="mx-auto d-block">
-            <div class="d-flex row justify-content-center">
-                <form class="form col-12">
-                    <div class="form-group mx-auto mb-2 row">
-                        <input type="text" class="form-control col-12 form-control-lg" id="mainSkills"
-                            placeholder="Main skills (separated with commas)">
-                    </div>
-                    <div class="form-group mx-auto mb-2 row">
-                        <input type="text" class="form-control col-12 form-control-lg" id="additionalSkills"
-                            placeholder="Additional skills (separated with commas)">
-                    </div>
-
-                    <div class="row">
-                        <button type="button" class="btn mb-2 btn-lg mx-auto"
-                            style="background-color:#7f94a3; color: white"
-                            onclick="javascript:callAjax(); return false">Search</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-        <div id="spinner" class="d-flex row mt-5 col" style="visibility: hidden">
-            <div class="spinner-grow spinner-border mx-auto" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
-        <div class="d-flex row mt-5 col-10 mx-auto">
-            <table id="mainTable" class="table table-hover" style="background-color: white;">
-                <tbody>
-                    <tr></tr>
-                </tbody>
-            </table>
-        </div>
-    </div> -->
-
-
     <div class="container">
         <img src="/static/images/partial_logo.png" class="mx-auto d-block" style="padding-top: 0%; padding-bottom: 0%">
         <div id="topBar" class="sticky-top pb-4" style="background-color: #FAFAFA;">
@@ -169,10 +131,19 @@
             </div>
         </div>
         <div class="d-flex row mt-3 col-8 mx-auto">
+            <!-- bar chart -->
             <div id="barChartContainer" class="pb-4">
                 <canvas id="barChart" class="pb-1"
                     style="padding-bottom: 15px; height: 370px; aspect-ratio: 4/3; margin-top: 5px;"></canvas>
             </div>
+
+            <!-- skill chart -->
+            <!-- <div style="width:40%" id='skillChartContainer'> -->
+            <div class="pb-4" id='skillChartContainer'>
+                <canvas id="skillChart" style="padding-bottom: 15px; height: 370px; aspect-ratio: 4/3; margin-top: 5px;"
+                    width="1140" height="570" class="chartjs-render-monitor"></canvas>
+            </div>
+
 
             <table id="mainTable" class="table table-hover mt-3" style="background-color: white;">
                 <tbody>
@@ -210,18 +181,7 @@
     </div>
 
     <!-- Tutaj jest chart  -->
-    <!-- <div style="width:40%" id='skill-chart'>
-        <div class="chartjs-size-monitor">
-            <div class="chartjs-size-monitor-expand">
-                <div class=""></div>
-            </div>
-            <div class="chartjs-size-monitor-shrink">
-                <div class=""></div>
-            </div>
-        </div>
-        <canvas id="canvas" style="display: block; height: 485px; width: 870px;" width="1140" height="570"
-            class="chartjs-render-monitor"></canvas>
-    </div> -->
+
 
 </body>
 
@@ -310,10 +270,6 @@
         console.log(all_skills);
         filled = true;
 
-
-
-
-
         $("#spinner").css("visibility", "visible");
         $.ajax({
             url: "http://0.0.0.0:5000/skill_search",
@@ -330,14 +286,12 @@
                     console.log(result);
                     var result_arr = JSON.parse(result);
 
-
                     let datapoints = []
                     let labelpoints = []
 
                     let c = 0
                     let bckColors = []
                     let sumOffers = 0
-                    console.log(sumOffers)
                     result_arr.forEach(element => {
                         // addRow(element);
                         if (element['count'] != undefined) {
@@ -357,9 +311,45 @@
                         }],
                         labels: labelpoints
                     }
+
+                    // radial
+
+                    var config = {
+                        type: 'radar',
+                        data: {
+                            labels: labelpoints,
+                            datasets: [{
+                                label: 'Skill layout',
+                                backgroundColor: colors('#E1B794').alpha(0.2).rgbString(),
+                                borderColor: '#90A9B7',
+                                pointBackgroundColor: '#A28497',
+                                data: datapoints
+                            }]
+                        },
+                        options: {
+                            legend: {
+                                position: 'top',
+                            },
+                            title: {
+                                display: true,
+                                text: 'Skill radar chart'
+                            },
+                            scale: {
+                                ticks: {
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    };
+
+
                     setTimeout(function () {
+                        // getSkillNumbers(result_arr);
                         options.elements.center.text = sumOffers
                         var canvas = document.getElementById("barChart");
+                        var rcanvas = document.getElementById("skillChart");
+                        var radar = new Chart(rcanvas, config);
+
                         var ctx = canvas.getContext('2d');
                         var chart = new Chart(ctx, {
                             type: 'doughnut',
@@ -394,14 +384,6 @@
         }
     }
 
-    // function addRow(parsedRow) {
-    //     var crafted = craftRow(parsedRow.skill, parsedRow.percentage);
-    //     $("#spinner").remove();
-
-    //     $("#mainTable").fadeIn(1000);
-
-    //     $('#mainTable tr:last').after(crafted);
-    // }
 
     function craftModalRow(key, value) {
         let row = `<tr>
