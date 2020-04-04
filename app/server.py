@@ -42,13 +42,6 @@ def skill():
     courses = courses_finder.perform_search(skill, 6)
     return render_template(COURSES_SUBPAGE, courses=courses)
 
-@app.route('/charts', methods=['GET'])
-def charts():
-    skill = request.args['skill'].lower()
-    out_dict = utils.get_experience_count_by_technologies()
-    temp = out_dict[skill]
-    return render_template(CHARTS_SUBPAGE, )
-
 @app.route('/salaries', methods=['GET'])
 def salaries():
     skills = request.args['skills'].lower()
