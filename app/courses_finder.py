@@ -41,7 +41,9 @@ class CoursesFinder:
 
     def perform_search(self, skills):
         if isinstance(skills, str):
-            return self.skill_to_courses[skills.lower()]
+            course_name = self.skill_to_courses[skills.lower()][0]
+            course = self.df[self.df['course'] == course_name].iloc[0]
+            return course
         else:
             return self.find_best_fitting([s.lower() for s in skills])
 
