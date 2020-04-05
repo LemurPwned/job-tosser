@@ -151,11 +151,13 @@
                         aria-controls="v-pills-profile" aria-selected="false">Pie chart</a>
                     <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab"
                         aria-controls="v-pills-messages" aria-selected="false">Radial chart</a>
+
                     <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab"
                         aria-controls="v-pills-settings" aria-selected="false">Salaries</a>
-                    <a class="nav-link" id="v-pills-seniority-tab" data-toggle="pill" href="#v-pills-seniority" role="tab"
-                        aria-controls="v-pills-seniority" aria-selected="false">Seniority</a>
-                    
+
+                    <a class="nav-link" id="v-pills-seniority-tab" data-toggle="pill" href="#v-pills-seniority"
+                        role="tab" aria-controls="v-pills-seniority" aria-selected="false">Seniority</a>
+
                 </div>
             </div>
             <div class="col-9">
@@ -198,12 +200,24 @@
                     <div class="tab-pane fade" id="v-pills-settings" role="tabpanel"
                         aria-labelledby="v-pills-settings-tab">
 
-                        <!-- salalry chart  -->
+                        <!-- salary chart  -->
                         <div class="pb-4" id='salaryChartContainer'>
                             <canvas id="salariesCanvas" style="display: block; height: 485px; width: 870px;"
                                 width="1140" height="570" class="chartjs-render-monitor"></canvas>
                         </div>
                     </div>
+
+
+                    <div class="tab-pane fade" id="v-pills-seniority" role="tabpanel"
+                        aria-labelledby="v-pills-settings-tab">
+
+                        <!-- seniority chart  -->
+                        <div class="pb-4" id='seniorityChartContainer'>
+                            <canvas id="seniorityCanvas" style="display: block; height: 485px; width: 870px;"
+                                width="1140" height="570" class="chartjs-render-monitor"></canvas>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -239,12 +253,12 @@
                 </div>
             </div>
         </div>
-        <canvas id="salariesCanvas" style="display: block; height: 485px; width: 870px;" width="1140" height="570"
-            class="chartjs-render-monitor"></canvas>
+        <!-- <canvas id="salariesCanvas" style="display: block; height: 485px; width: 870px;" width="1140" height="570"
+            class="chartjs-render-monitor"></canvas> -->
     </div>
 
 
-    <div style="width:40%" id='salaries-chart'>
+    <!-- <div style="width:40%" id='salaries-chart'>
         <div class="chartjs-size-monitor">
             <div class="chartjs-size-monitor-expand">
                 <div class=""></div>
@@ -255,7 +269,7 @@
         </div>
         <canvas id="seniorityCanvas" style="display: block; height: 485px; width: 870px;" width="1140" height="570"
             class="chartjs-render-monitor"></canvas>
-    </div>
+    </div> -->
 
     <footer style="margin-top: 25px;">
         <p></p>
@@ -345,7 +359,8 @@
                     }
                 }
 
-                let labels = ["1st quantile (min, max)", "2nd quantile (min, max)", "3rd quantile (min, max)", "4th quantile (min, max)"];
+                let labels = ["1st quantile (min, max)",
+                    "2nd quantile (min, max)", "3rd quantile (min, max)", "4th quantile (min, max)"];
                 let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"];
 
                 var config = {
@@ -551,9 +566,7 @@
 
     function onSkillClick(skill) {
         console.log(skill);
-        window.location.replace("index.html?search=" + skill);
-        // fillModal(skill, 'dupa');
-        // $("#exampleModalCenter").modal('show');
+        window.location.replace("/courses?skill=" + skill);
     }
 
     function fillModal(skill, data) {

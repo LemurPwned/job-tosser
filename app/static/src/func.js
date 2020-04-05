@@ -71,60 +71,7 @@ function craftRow(skill, value) {
 
 var colors = Chart.helpers.color;
 
-function salariesChart() {
-    var main_skills = $("#skillNames").val().replace(/, /g, ",");
-
-    $.ajax({
-        url: "/skill_salaries",
-        data: {
-            skills: main_skills
-        },
-        success: function (result) {
-            var min_arr = JSON.parse(result)["min_quantiles"];
-            var max_arr = JSON.parse(result)["max_quantiles"];
-
-            for (var i = 0; i < min_arr.length; i++) {
-                if (min_arr[i] > max_arr[i]) {
-                    var tmp = max_arr[i];
-                    max_arr[i] = min_arr[i];
-                    min_arr[i] = tmp;
-                }
-            }
-
-            let labels = ["1st quantile", "2nd quantile", "3rd quantile", "4th quantile"];
-            let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"];
-
-            var config = {
-                type: 'horizontalBar',
-                data: {
-                    labels: labels,
-                    datasets: [
-                    {
-                        backgroundColor: backgroundColors,
-                        data: min_arr
-                    },
-                    {
-                        backgroundColor: backgroundColors,
-                        data: max_arr
-                    }
-                    ]
-                },
-                options: {
-                    legend: { display: false },
-                    title: {
-                        display: true,
-                        text: 'Salaries'
-                    }
-                }
-            };
-            var barchart = new Chart(document.getElementById('salariesCanvas'), config);
-        }
-    });
-}
-
-function seniorityChart() {
-    var main_skills = $("#skillNames").val().replace(/, /g, ",");
-
+function seniorityChart(main_skills) {
     $.ajax({
         url: "/skill_seniority",
         data: {
@@ -134,15 +81,15 @@ function seniorityChart() {
             seniority = JSON.parse(result);
             console.log(seniority)
 
-            for (var i = 0; i < min_arr.length; i++) {
-                if (min_arr[i] > max_arr[i]) {
-                    var tmp = max_arr[i];
-                    max_arr[i] = min_arr[i];
-                    min_arr[i] = tmp;
-                }
-            }
+            seniorityKeys = Object.keys(seniority);
+        
+            let labels = [];
+            let counts = [];
+            seniorityKeys.forEach((el) => { 
+                labels.push(el);
+                counts.push(seniority[el]);
+            });
 
-            let labels = ["1st quantile", "2nd quantile", "3rd quantile", "4th quantile"];
             let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"];
 
             var config = {
@@ -152,23 +99,19 @@ function seniorityChart() {
                     datasets: [
                     {
                         backgroundColor: backgroundColors,
-                        data: min_arr
+                        data: counts
                     },
-                    {
-                        backgroundColor: backgroundColors,
-                        data: max_arr
-                    }
                     ]
                 },
                 options: {
                     legend: { display: false },
                     title: {
                         display: true,
-                        text: 'Salaries'
+                        text: 'Experience Levels'
                     }
                 }
             };
-            var barchart = new Chart(document.getElementById('salariesCanvas'), config);
+            var barchart = new Chart(document.getElementById('seniorityCanvas'), config);
         }
     });
 }

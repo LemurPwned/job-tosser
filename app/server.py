@@ -91,12 +91,14 @@ def skill_search():
 
 @app.route('/skill_seniority', methods=['GET'])
 def skill_seniority():
-    data = get_experience_count_by_technologies()
-    skills = "python"
+    data = get_experience_count_by_technologies(skill_matcher.df)
+    skills = None
     try:
-        skills = request.args['skills'].lower()
+        skills = request.args['skills'].lower().split(',')
     except:
         pass
+
+    skills = 'python'
 
     seniority = data[skills]
     return json.dumps(seniority)
