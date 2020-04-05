@@ -190,13 +190,17 @@
                     aria-labelledby="v-pills-courses-tab">
 
                         <!-- courses -->
-                        <iframe id="iframe_courses" src="http://127.0.0.1:5000/courses?skill=python" style="width: 100%;
+                        <iframe id="iframe_courses" src="http://127.0.0.1:5000/courses?skill=python" style="width: 810px;
                         height:10000px;
                         border-style: none;
                         scroll-behavior: smooth;
                         overflow-y: hidden;
                         overflow-x: hidden;"
-                        onreadystatechange="resizeIFrameToFitContent()"></iframe>
+                        onreadystatechange="function () {
+                            x = document.getElementById('iframe_courses');
+                            if ( x.readyState == 'complete' ) {
+                               iframeIsLoaded()
+                        }}"></iframe>
                     </div>
 
                     <div class="tab-pane fade" id="v-pills-home" role="tabpanel"
@@ -342,13 +346,15 @@
             }
         }
     });
-
+    
+    function iframeIsLoaded() {
+        resizeIFrameToFitContent();
+    }
 
     function resizeIFrameToFitContent() {
-        console.log(iFrame.contentWindow.document.body.scrollHeight);
-        // iFrame.width  = iFrame.contentWindow.document.body.scrollWidth;
-        iFrame.height = document.getElementById('iframe_courses').contentWindow.document.body.scrollHeight;
-        console.log(iFrame.height);
+        el = document.getElementById('iframe_courses')
+        el.height = el.contentWindow.document.body.scrollHeight;
+        console.log(el.height);
     }
 
     var input = document.getElementById("skillNames");
