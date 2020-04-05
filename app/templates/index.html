@@ -105,8 +105,27 @@
             left: 0;
             top: 0
         }
+
+        .nav-pills .nav-link.active {
+            background-color: #7f94a3 !important;
+        }
+        .nav-pills>li>a.active {
+            background-color: #7f94a3 !important;
+            color: #ffffff !important;
+        }
+
+        .nav-pills>li>a:hover {
+            background-color: #7f94a3 !important;
+            color: #7f94a3 !important;
+        }
+
+        .nav-link-color {
+            color: #788AA3;
+        }
     </style>
 </head>
+
+<!-- #7f94a3 -->
 
 <body style="background-color:#FAFAFA">
     <nav class="navbar navbar-expand-lg navbar-light sticky-top col-4">
@@ -142,21 +161,27 @@
         <!-- vertical pills here -->
         <div class="row" id="pills">
             <div class="col-3">
-                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                    <a class="nav-link" id="v-pills-courses-tab" data-toggle="pill" href="#v-pills-courses" role="tab"
-                        aria-controls="v-pills-courses" aria-selected="true">Courses</a>
-                    <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab"
-                        aria-controls="v-pills-home" aria-selected="false">Skills</a>
-                    <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab"
-                        aria-controls="v-pills-profile" aria-selected="false">Pie chart</a>
-                    <a class="nav-link" id="v-pills-messages-tab" data-toggle="pill" href="#v-pills-messages" role="tab"
-                        aria-controls="v-pills-messages" aria-selected="false">Radial chart</a>
+                <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist"
+                    aria-orientation="vertical">
+                    <a class="nav-link nav-link-color" id="v-pills-courses-tab" data-toggle="pill"
+                        href="#v-pills-courses" role="tab" aria-controls="v-pills-courses"
+                        aria-selected="true">Courses</a>
+                    <a class="nav-link nav-link-color active" id="v-pills-home-tab" data-toggle="pill"
+                        href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false">Skills</a>
+                    <a class="nav-link nav-link-color" id="v-pills-profile-tab" data-toggle="pill"
+                        href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Pie
+                        chart</a>
+                    <a class="nav-link nav-link-color" id="v-pills-messages-tab" data-toggle="pill"
+                        href="#v-pills-messages" role="tab" aria-controls="v-pills-messages"
+                        aria-selected="false">Radial chart</a>
 
-                    <a class="nav-link" id="v-pills-settings-tab" data-toggle="pill" href="#v-pills-settings" role="tab"
-                        aria-controls="v-pills-settings" aria-selected="false">Salaries</a>
+                    <a class="nav-link nav-link-color" id="v-pills-settings-tab" data-toggle="pill"
+                        href="#v-pills-settings" role="tab" aria-controls="v-pills-settings"
+                        aria-selected="false">Salaries</a>
 
-                    <a class="nav-link" id="v-pills-seniority-tab" data-toggle="pill" href="#v-pills-seniority"
-                        role="tab" aria-controls="v-pills-seniority" aria-selected="false">Seniority</a>
+                    <a class="nav-link nav-link-color" id="v-pills-seniority-tab" data-toggle="pill"
+                        href="#v-pills-seniority" role="tab" aria-controls="v-pills-seniority"
+                        aria-selected="false">Seniority</a>
 
                 </div>
             </div>
@@ -223,10 +248,6 @@
         </div>
 
 
-        <!-- </div>
-    </div>
-    </div> -->
-
         <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered" role="document">
@@ -253,23 +274,9 @@
                 </div>
             </div>
         </div>
-        <!-- <canvas id="salariesCanvas" style="display: block; height: 485px; width: 870px;" width="1140" height="570"
-            class="chartjs-render-monitor"></canvas> -->
     </div>
 
 
-    <!-- <div style="width:40%" id='salaries-chart'>
-        <div class="chartjs-size-monitor">
-            <div class="chartjs-size-monitor-expand">
-                <div class=""></div>
-            </div>
-            <div class="chartjs-size-monitor-shrink">
-                <div class=""></div>
-            </div>
-        </div>
-        <canvas id="seniorityCanvas" style="display: block; height: 485px; width: 870px;" width="1140" height="570"
-            class="chartjs-render-monitor"></canvas>
-    </div> -->
 
     <footer style="margin-top: 25px;">
         <p></p>
@@ -279,9 +286,6 @@
 <script>
     var filled = false;
 
-    // $(document).ready(function () {
-    //     console.log("ready!");
-    // });
     $(document).ready(onReady);
 
 
@@ -337,256 +341,6 @@
 
 
 
-
-    function salariesChart(main_skills) {
-        // var main_skills = $("#skillNames").val().replace(/, /g, ",");
-        console.log(main_skills)
-        $.ajax({
-            url: "/skill_salaries",
-            data: {
-                skills: main_skills
-            },
-            success: function (result) {
-                console.log(result)
-                var min_arr = JSON.parse(result)["min_quantiles"];
-                var max_arr = JSON.parse(result)["max_quantiles"];
-
-                for (var i = 0; i < min_arr.length; i++) {
-                    if (min_arr[i] > max_arr[i]) {
-                        var tmp = max_arr[i];
-                        max_arr[i] = min_arr[i];
-                        min_arr[i] = tmp;
-                    }
-                }
-
-                let labels = ["1st quantile (min, max)",
-                    "2nd quantile (min, max)", "3rd quantile (min, max)", "4th quantile (min, max)"];
-                let backgroundColors = ["#3e95cd", "#8e5ea2", "#3cba9f", "#e8c3b9"];
-
-                var config = {
-                    type: 'horizontalBar',
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            {
-                                backgroundColor: backgroundColors,
-                                data: min_arr
-                            },
-                            {
-                                backgroundColor: backgroundColors,
-                                data: max_arr
-                            }
-                        ]
-                    },
-                    options: {
-                        legend: { display: false },
-                        title: {
-                            display: true,
-                            text: 'Salaries (annual, in €)'
-                        }
-                    }
-                };
-                var barchart = new Chart(document.getElementById('salariesCanvas'), config);
-            }
-        });
-    }
-
-    var options = {
-        title: {
-            display: true,
-            text: 'What skills are co-occuring?',
-            position: 'top'
-        },
-        rotation: -0.7 * Math.PI,
-        resposive: true,
-        elements: {
-            center: {
-                text: '90%',
-                color: '#D6C9C9', // Default is #000000
-                fontStyle: 'Arial', // Default is Arial
-                sidePadding: 20 // Defualt is 20 (as a percentage)
-            }
-        }
-    };
-
-
-    function requestMatchingSkills() {
-        if (filled) {
-            $("#mainTable").fadeOut(300);
-            $("#mainTable").html("<tr></tr>");
-            $("#mainTable").fadeIn(1000);
-        }
-
-
-        var all_skills = $("#skillNames").val().replace(/, /g, ",");
-
-        console.log(all_skills);
-        filled = true;
-
-        $("#spinner").css("visibility", "visible");
-        $.ajax({
-            url: "/skill_search",
-            data: {
-                skills: all_skills
-            },
-            success: function (result) {
-                if (result === "[]") {
-                    notFound();
-                }
-                else {
-
-                    // generate bar chart here 
-                    var result_arr = JSON.parse(result);
-
-                    let datapoints = []
-                    let labelpoints = []
-
-                    let c = 0
-                    let bckColors = []
-                    let sumOffers = 0
-                    result_arr.forEach(element => {
-                        // addRow(element);
-                        if (element['count'] != undefined) {
-                            datapoints.push(element['count'])
-                            labelpoints.push(element['skill'])
-                            sumOffers += element['count']
-                        }
-                        c++
-                    });
-
-                    // labelpoints.push(all_skills)
-                    req = labelpoints.join(',')
-                    console.log(req);
-                    salariesChart(req);
-                    seniorityChart(req)
-
-                    data = {
-                        datasets: [{
-                            data: datapoints,
-                            backgroundColor: ['#E1B794', '#7F94A3', '#E3E3E3', '#DB2763',
-                                '#7392B7', '#C6CAED', '#A28497', '#73683B', '#583E23',
-                                '#E8EEF2', '#D6C9C9', '#90A9B7', '#8D5A97'],
-                        }],
-                        labels: labelpoints
-                    }
-
-                    // radial
-
-                    var config = {
-                        type: 'radar',
-                        data: {
-                            labels: labelpoints,
-                            datasets: [{
-                                label: 'Skill layout',
-                                backgroundColor: colors('#E1B794').alpha(0.2).rgbString(),
-                                borderColor: '#90A9B7',
-                                pointBackgroundColor: '#A28497',
-                                data: datapoints
-                            }]
-                        },
-                        options: {
-                            legend: {
-                                position: 'top',
-                            },
-                            title: {
-                                display: true,
-                                text: 'Skill radar chart'
-                            },
-                            scale: {
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    };
-
-
-                    setTimeout(function () {
-                        // getSkillNumbers(result_arr);
-                        options.elements.center.text = sumOffers
-                        var canvas = document.getElementById("barChart");
-                        var rcanvas = document.getElementById("skillChart");
-                        var radar = new Chart(rcanvas, config);
-
-                        var ctx = canvas.getContext('2d');
-                        var chart = new Chart(ctx, {
-                            type: 'doughnut',
-                            data: data,
-                            options: options
-                        });
-                    }, 1000);
-
-
-                    console.log(result_arr)
-                    setTimeout(function () {
-                        result_arr.forEach(element => {
-                            console.log(element)
-                            addRow(element);
-                        });
-                        $("#pills").show();
-                    }, 1000);
-                }
-            }
-        });
-    };
-
-
-    function addRow(parsedRow) {
-        if (parsedRow['skill'] != undefined) {
-
-            var crafted = craftRow(parsedRow.skill, parsedRow.percentage);
-            $("#spinner").remove();
-
-            $("#mainTable").fadeIn(1000);
-
-            $('#mainTable tr:last').after(crafted);
-        }
-    }
-
-
-    function craftModalRow(key, value) {
-        let row = `<tr>
-            <td align="center" id="skillName">${key}</td>
-            <td align="center">${value}</td>
-        </tr>`
-        return row;
-    }
-
-    function addModalRow(parsedRow) {
-        var crafted = craftModalRow(parsedRow.name, parsedRow.result);
-        console.log(crafted);
-
-        $("#modalSpinner").remove();
-
-        $("#modalTable").fadeIn(1000);
-        console.log($('#modalTable tr:last'));
-
-        $('#modalTable tr:last').after(crafted);
-    }
-
-    function onSkillClick(skill) {
-        console.log(skill);
-        window.location.replace("/courses?skill=" + skill);
-    }
-
-    function fillModal(skill, data) {
-        $("#exampleModalCenter").find('#exampleModalCenterTitle').html(skill);
-        $("#modalTable").html("<tbody><tr id='toDelete'></tr></tbody>");
-
-        $.ajax({
-            url: "http://0.0.0.0:5000/stats",
-            data: {
-                text: $('#positionName').val(),
-                limit: 20
-            },
-            success: function (result) {
-                var result_arr = JSON.parse(result);
-                result_arr.forEach(element => {
-                    addModalRow(element);
-                });
-            }
-        });
-    }
 
 
 </script>
