@@ -19,8 +19,12 @@ function notFound() {
     row = `<tr>
             <td align="left">No results found</td>
             </tr>`
-    $("#barChart").remove();
     $("#spinner").remove();
+
+    if (barChartRef != null) barChartRef.destroy();
+    if (salaryChartRef != null) salaryChartRef.destroy();
+    if (seniorityChartRef != null) seniorityChartRef.destroy();
+    if (radialChartRef != null) radialChartRef.destroy();
 
     $("#mainTable").fadeIn(1000);
 
@@ -335,6 +339,7 @@ function requestMatchingSkills() {
                         data: data,
                         options: options
                     });
+                    barChartRef.show();
                 }, 1000);
 
                 setTimeout(function () {

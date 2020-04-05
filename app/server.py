@@ -102,7 +102,10 @@ def skill_search():
         limit = int(limit)
     except:
         pass
-    return skill_matcher.perform_search(skills, limit)
+    try:
+        return skill_matcher.perform_search(skills, limit)
+    except:
+        return "[]"
 
 @app.route('/skill_seniority', methods=['GET'])
 def skill_seniority():
