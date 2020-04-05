@@ -21,6 +21,7 @@ KEPLER_FILE = 'kepler.gl.html'
 COURSES_SUBPAGE = "courses.html"
 REVERSE_SEARCH_SUBPAGE = "reverse_search.html"
 SEARCH_SUBPAGE = "search.html"
+NO_COURSES_SUBPAGE = "no_courses.html"
 
 DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
 COURSE_DATABASE = os.path.join(DATA_LOC, 'res.csv')
@@ -46,6 +47,9 @@ def courses():
         pass
 
     courses = courses_finder.perform_search(skill, 6)
+    print(courses)
+    if len(courses) == 0:
+        return render_template(NO_COURSES_SUBPAGE, courses=courses)
     if len(courses) % 2 != 0 and len(courses) > 1:
         courses = courses[:-1]
     return render_template(COURSES_SUBPAGE, courses=courses)
@@ -98,7 +102,10 @@ def skill_search():
         limit = int(limit)
     except:
         pass
-    return skill_matcher.perform_search(skills, limit)
+    try:
+        return skill_matcher.perform_search(skills, limit)
+    except:
+        return "[]"
 
 @app.route('/skill_seniority', methods=['GET'])
 def skill_seniority():

@@ -19,8 +19,12 @@ function notFound() {
     row = `<tr>
             <td align="left">No results found</td>
             </tr>`
-    $("#barChart").remove();
     $("#spinner").remove();
+
+    if (barChartRef != null) barChartRef.destroy();
+    if (salaryChartRef != null) salaryChartRef.destroy();
+    if (seniorityChartRef != null) seniorityChartRef.destroy();
+    if (radialChartRef != null) radialChartRef.destroy();
 
     $("#mainTable").fadeIn(1000);
 
@@ -274,6 +278,8 @@ function requestMatchingSkills() {
 
     var all_skills = $("#skillNames").val().replace(/, /g, ",");
 
+    document.getElementById("iframe_courses").src = "http://127.0.0.1:5000/courses?skill=" + all_skills;
+
     console.log(all_skills);
     filled = true;
 
@@ -333,6 +339,7 @@ function requestMatchingSkills() {
                         data: data,
                         options: options
                     });
+                    barChartRef.show();
                 }, 1000);
 
                 setTimeout(function () {
