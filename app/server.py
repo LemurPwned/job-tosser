@@ -19,12 +19,14 @@ DATA_LOC = '../data'
 INDEX_FILE = 'index.html'
 KEPLER_FILE = 'kepler.gl.html'
 COURSES_SUBPAGE = "courses.html"
+REVERSE_SEARCH_SUBPAGE = "reverse_search.html"
+SEARCH_SUBPAGE = "search.html"
 
 DATABASE = os.path.join(DATA_LOC, 'DATABASE.pkl')
 COURSE_DATABASE = os.path.join(DATA_LOC, 'res.csv')
 
-# aggregator = Aggregator(DATABASE)
-# r_search = ReverseSearch(DATABASE)
+aggregator = Aggregator(DATABASE)
+r_search = ReverseSearch(DATABASE)
 skill_matcher = SkillMatcher(DATABASE.replace('.pkl', '.csv'))
 
 courses_finder = CoursesFinder(COURSE_DATABASE)
@@ -62,21 +64,28 @@ def match_course():
         pass
     return courses_finder.perform_search(skills)
 
+@app.route("/reverse_search_static")
+def reverse_search_static():
+    return render_template(REVERSE_SEARCH_SUBPAGE)
 
-# @app.route('/reverse_search', methods=['GET'])
-# def reverse_search():
-#     skills = request.args['skills'].lower()
-#     required, additional = skills.split("|")
-#     required = list(set(required.split(",")))
-#     additional = list(set(additional.split(",")))
-#     print(required, additional)
-#     limit = None
-#     try:
-#         limit = request.args['limit']
-#         limit = int(limit)
-#     except:
-#         limit = None
-#     return r_search.perform_search(required, additional, 10)
+@app.route("/search_static")
+def search_static():
+    return render_template(SEARCH_SUBPAGE)
+
+@app.route('/reverse_search', methods=['GET'])
+def reverse_search():
+    skills = request.args['skills'].lower()
+    required, additional = skills.split("|")
+    required = list(set(required.split(",")))
+    additional = list(set(additional.split(",")))
+    print(required, additional)
+    limit = None
+    try:
+        limit = request.args['limit']
+        limit = int(limit)
+    except:
+        limit = None
+    return r_search.perform_search(required, additional, 10)
 
 
 @app.route('/skill_search', methods=['GET'])
