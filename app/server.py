@@ -94,12 +94,10 @@ def skill_seniority():
     data = get_experience_count_by_technologies(skill_matcher.df)
     skills = None
     try:
-        skills = request.args['skills'].lower().split(',')
+        skills = request.args['skills'].lower()
     except:
         pass
-
-    skills = 'python'
-
+    print(skills)
     seniority = data[skills]
     return json.dumps(seniority)
 
