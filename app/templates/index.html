@@ -109,6 +109,7 @@
         .nav-pills .nav-link.active {
             background-color: #7f94a3 !important;
         }
+
         .nav-pills>li>a.active {
             background-color: #7f94a3 !important;
             color: #ffffff !important;
@@ -169,8 +170,8 @@
                     <a class="nav-link nav-link-color active" id="v-pills-courses-tab" data-toggle="pill"
                         href="#v-pills-courses" role="tab" aria-controls="v-pills-courses"
                         aria-selected="true">Courses</a>
-                    <a class="nav-link nav-link-color" id="v-pills-home-tab" data-toggle="pill"
-                        href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="false">Skills</a>
+                    <a class="nav-link nav-link-color" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home"
+                        role="tab" aria-controls="v-pills-home" aria-selected="false">Skills</a>
                     <a class="nav-link nav-link-color" id="v-pills-profile-tab" data-toggle="pill"
                         href="#v-pills-profile" role="tab" aria-controls="v-pills-profile" aria-selected="false">Pie
                         chart</a>
@@ -190,7 +191,7 @@
             <div class="col-9">
                 <div class="tab-content" id="v-pills-tabContent">
                     <div class="tab-pane fade show active" id="v-pills-courses" role="tabpanel"
-                    aria-labelledby="v-pills-courses-tab">
+                        aria-labelledby="v-pills-courses-tab">
 
                         <!-- courses -->
                         <iframe id="iframe_courses" src="http://127.0.0.1:5000/courses?skill=python" style="width: 810px;
@@ -198,19 +199,18 @@
                         border-style: none;
                         scroll-behavior: smooth;
                         overflow-y: hidden;
-                        overflow-x: hidden;"
-                        onreadystatechange="function () {
+                        overflow-x: hidden;" onreadystatechange="function () {
                             x = document.getElementById('iframe_courses');
                             if ( x.readyState == 'complete' ) {
                                iframeIsLoaded()
                         }}"></iframe>
                     </div>
 
-                    <div class="tab-pane fade" id="v-pills-home" role="tabpanel"
-                        aria-labelledby="v-pills-home-tab">
+                    <div class="tab-pane fade" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
 
                         <!-- main table -->
-                        <table id="mainTable" class="table table-hover mt-3" style="background-color: white;">
+                        <table id="mainTable" class="table table-hover mt-3"
+                            style="background-color: white; width: 86%; left: 1%;">
                             <tbody>
                                 <tr></tr>
                             </tbody>
@@ -225,6 +225,11 @@
                             <canvas id="barChart" class="pb-1"
                                 style="padding-bottom: 15px; width:100%; height:500px; aspect-ratio: 4/3; margin-top: 5px;"></canvas>
                         </div>
+                        <p id='bar-desc' style="text-align: center;">
+                            This barchart represents the total number of occurences of a related skills in the job postings. 
+                            The number of total occurences has been put inside the doughnut chart.
+                            Each slice represents a separate skill -- with the proportion of importance relative to the others.
+                        </p>
                     </div>
 
 
@@ -237,6 +242,11 @@
                                 style="padding-bottom: 15px; width:100%; aspect-ratio: 4/3; margin-top: 5px;"
                                 width="1140" height="570" class="chartjs-render-monitor">
                             </canvas>
+                            <p id='bar-desc' style="text-align: center;">
+                                The skill chart depicts you how heavily are the other skills correlated the searched one. 
+                                The more distributed and uniform the streach, the more correlated skills you should learn 
+                                before applying for a posting calling for a searched skill and the pairs of high value.
+                            </p>
                         </div>
                     </div>
 
@@ -249,6 +259,11 @@
                             <canvas id="salariesCanvas" style="display: block; height: 485px; width: 870px;"
                                 width="1140" height="570" class="chartjs-render-monitor"></canvas>
                         </div>
+                        <p id='bar-desc' style="text-align: center;">
+                            The salary chart aims to depict the minumum and maximum ranges of the salary for the positions which
+                            heavily depend on the searched skill. The upper bar in each pair is always the minimum and the other is the maximum
+                            expected salary quantile -- 1st, 2nd, 3rd and 4th correspond to 25%, 50%, 75% and 100% respectively.
+                        </p>
                     </div>
 
                     <div class="tab-pane fade" id="v-pills-seniority" role="tabpanel"
@@ -259,6 +274,10 @@
                             <canvas id="seniorityCanvas" style="display: block; height: 485px; width: 870px;"
                                 width="1140" height="570" class="chartjs-render-monitor"></canvas>
                         </div>
+                        <p id='bar-desc' style="text-align: center;">
+                            The seniority graphs are designed to show you how many postings call for a specific experience level -- and you can view the full decompostion 
+                            on the chart. See if there are enough job postings that are adequate for your experience level.
+                        </p>
                     </div>
 
                 </div>
@@ -348,7 +367,7 @@
             }
         }
     });
-    
+
     function iframeIsLoaded() {
         resizeIFrameToFitContent();
     }

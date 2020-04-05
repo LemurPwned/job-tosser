@@ -38,8 +38,6 @@ function onReady() {
     $("#pills").hide();
 }
 
-
-
 function addRow(parsedRow) {
     if (parsedRow['skill'] != undefined) {
 
