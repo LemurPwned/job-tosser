@@ -9,7 +9,10 @@ let colorMap = {
 }
 let colorThres = Object.keys(colorMap)
 
-
+let radialChartRef = null
+let barChartRef = null
+let salaryChartRef = null
+let seniorityChartRef = null
 
 
 function notFound() {
@@ -120,7 +123,10 @@ var options = {
 
 
 function salariesChart(main_skills) {
-    // var main_skills = $("#skillNames").val().replace(/, /g, ",");
+
+    if (salaryChartRef != null) {
+        salaryChartRef.destroy();
+    }
     console.log(main_skills)
     $.ajax({
         url: "/skill_salaries",
@@ -167,13 +173,17 @@ function salariesChart(main_skills) {
                     }
                 }
             };
-            var barchart = new Chart(document.getElementById('salariesCanvas'), config);
+            salaryChartRef = new Chart(document.getElementById('salariesCanvas'), config);
         }
     });
 }
 
 
 function seniorityChart(main_skills) {
+    if (seniorityChartRef != null) {
+        seniorityChartRef.destroy();
+    }
+
     $.ajax({
         url: "/skill_seniority",
         data: {
@@ -213,13 +223,16 @@ function seniorityChart(main_skills) {
                     }
                 }
             };
-            var barchart = new Chart(document.getElementById('seniorityCanvas'), config);
+            seniorityChartRef = new Chart(document.getElementById('seniorityCanvas'), config);
         }
     });
 }
 
 
 function radialChart(datapoints, labelpoints) {
+    if (radialChartRef != null) {
+        radialChartRef.destroy();
+    }
     data = {
         datasets: [{
             data: datapoints,
@@ -245,6 +258,7 @@ function radialChart(datapoints, labelpoints) {
         options: {
             legend: {
                 position: 'top',
+                display: false
             },
             title: {
                 display: true,
@@ -258,7 +272,7 @@ function radialChart(datapoints, labelpoints) {
         }
     };
     var rcanvas = document.getElementById("skillChart");
-    var radar = new Chart(rcanvas, config);
+    radialChartRef = new Chart(rcanvas, config);
 }
 
 
@@ -267,8 +281,12 @@ function requestMatchingSkills() {
         $("#mainTable").fadeOut(300);
         $("#mainTable").html("<tr></tr>");
         $("#mainTable").fadeIn(1000);
-    }
 
+        $("#bat")
+    }
+    if (barChartRef != null) {
+        barChartRef.destroy();
+    }
 
     var all_skills = $("#skillNames").val().replace(/, /g, ",");
 
@@ -316,7 +334,7 @@ function requestMatchingSkills() {
 
 
                     var ctx = canvas.getContext('2d');
-                    var chart = new Chart(ctx, {
+                    barChartRef = new Chart(ctx, {
                         type: 'doughnut',
                         data: data,
                         options: options
