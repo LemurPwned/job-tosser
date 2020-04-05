@@ -118,10 +118,10 @@
             <div class="row">
                 {% endif %}
                 <div class="col">
-                    <div class="jumbotron">
+                    <div class="jumbotron" style="width:350px">
                         <div style="height:500px;">
-                            <h1 class="display-4 ">{{course['course']}}</h1>
-                            <p class="lead">{{course['desc']}}</p>
+                            <h2 class="display-7 ">{{course['course']}}</h1>
+                            <p class="lead" style="font-size:15px;">{{course['desc']}}</p>
                             <!-- <div class="btn-group" role="group" aria-label="Basic example"> -->
                             {% if course['level'] == "beginner" %}
                             <button class="btn btn-success pills">Beginner</button>
@@ -138,7 +138,7 @@
                             {% endfor %}
                         </div>
                         <hr class="my-4">
-                        <a class="btn btn-primary btn-lg pills" href="https://udacity.com/{{course['link']}}"
+                        <a class="btn btn-primary btn-block pills" style="width" href="https://udacity.com/{{course['link']}}"
                                 role="button">Learn more</a>
                         
                     </div>
