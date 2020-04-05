@@ -352,7 +352,7 @@ function onSkillClick(skill) {
     window.location.replace("/courses?skill=" + skill);
 }
 
-function fillModal(skill, data) {
+function fillModal(skill) {
     $("#exampleModalCenter").find('#exampleModalCenterTitle').html(skill);
     $("#modalTable").html("<tbody><tr id='toDelete'></tr></tbody>");
 
