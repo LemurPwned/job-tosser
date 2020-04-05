@@ -305,7 +305,7 @@ function requestMatchingSkills() {
                 req = labelpoints.join(',')
                 console.log(req);
                 salariesChart(req);
-                seniorityChart(req)
+                seniorityChart(all_skills)
 
                 setTimeout(function () {
                     // getSkillNumbers(result_arr);
