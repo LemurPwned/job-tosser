@@ -36,7 +36,7 @@ def root():
 
 
 @app.route('/courses', methods=['GET'])
-def skill():
+def courses():
     skill = None
     try:
         skill = request.args['skill'].lower()
@@ -44,6 +44,8 @@ def skill():
         pass
 
     courses = courses_finder.perform_search(skill, 6)
+    if len(courses) % 2 != 0 and len(courses) > 1:
+        courses = courses[:-1]
     return render_template(COURSES_SUBPAGE, courses=courses)
 
 @app.route('/salary_map')
