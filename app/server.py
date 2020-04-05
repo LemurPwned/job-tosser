@@ -46,6 +46,9 @@ def courses():
         pass
 
     courses = courses_finder.perform_search(skill, 6)
+    print(courses)
+    if len(courses) == 0:
+        return "No courses found!"
     if len(courses) % 2 != 0 and len(courses) > 1:
         courses = courses[:-1]
     return render_template(COURSES_SUBPAGE, courses=courses)

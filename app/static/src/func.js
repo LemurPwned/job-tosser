@@ -281,6 +281,8 @@ function requestMatchingSkills() {
 
     var all_skills = $("#skillNames").val().replace(/, /g, ",");
 
+    document.getElementById("iframe_courses").src = "http://127.0.0.1:5000/courses?skill=" + all_skills;
+
     console.log(all_skills);
     filled = true;
 
