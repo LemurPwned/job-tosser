@@ -32,13 +32,6 @@ function notFound() {
 function onReady() {
     console.log("ready!");
     $("#pills").hide();
-    // $('form input').keydown(function (e) {
-    //     if (e.keyCode == 13) {
-    //         e.preventDefault();
-    //         callAjax();
-    //         return false;
-    //     }
-    // });
 }
 
 
@@ -315,8 +308,8 @@ function requestMatchingSkills() {
 
                 req = labelpoints.join(',')
                 console.log(req);
-                salariesChart(req);
-                seniorityChart(all_skills)
+                salariesChart(all_skills);
+                seniorityChart(all_skills);
 
                 data = {
                     datasets: [{
