@@ -233,15 +233,6 @@ function radialChart(datapoints, labelpoints) {
     if (radialChartRef != null) {
         radialChartRef.destroy();
     }
-    data = {
-        datasets: [{
-            data: datapoints,
-            backgroundColor: ['#E1B794', '#7F94A3', '#E3E3E3', '#DB2763',
-                '#7392B7', '#C6CAED', '#A28497', '#73683B', '#583E23',
-                '#E8EEF2', '#D6C9C9', '#90A9B7', '#8D5A97'],
-        }],
-        labels: labelpoints
-    }
 
     var config = {
         type: 'radar',
@@ -325,6 +316,16 @@ function requestMatchingSkills() {
                 salariesChart(req);
                 seniorityChart(all_skills)
 
+                data = {
+                    datasets: [{
+                        data: datapoints,
+                        backgroundColor: ['#E1B794', '#7F94A3', '#E3E3E3', '#DB2763',
+                            '#7392B7', '#C6CAED', '#A28497', '#73683B', '#583E23',
+                            '#E8EEF2', '#D6C9C9', '#90A9B7', '#8D5A97'],
+                    }],
+                    labels: labelpoints
+                }
+
                 setTimeout(function () {
                     // getSkillNumbers(result_arr);
                     radialChart(datapoints, labelpoints)
@@ -370,7 +371,7 @@ function onSkillClick(skill) {
     window.location.replace("/courses?skill=" + skill);
 }
 
-function fillModal(skill, data) {
+function fillModal(skill) {
     $("#exampleModalCenter").find('#exampleModalCenterTitle').html(skill);
     $("#modalTable").html("<tbody><tr id='toDelete'></tr></tbody>");
 
